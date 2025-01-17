@@ -1,0 +1,27 @@
+{
+  "name": "bones",
+  "version": "1.0.0",
+  "description": "A daily planner and task hub, but keeping in mind that some days are not a bones day.",
+  "main": "index.js",
+  "scripts": {
+    "start-watch": "nodemon index.js",
+    "start": "node index.js",
+    "dev": "concurrently \"npm run start-watch\" \"cd front-end && npm start\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "bootstrap": "^5.3.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.0",
+    "styled-components": "^6.1.14",
+    "web-vitals": "^4.2.4"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "short_name": "Bones",
+  "name": "The Bones App: Planner and Task hub",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "16x16, 32x32, 48x48, 64x64",
+      "type": "image/ico"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
