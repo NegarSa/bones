@@ -1,2 +1,4 @@
 node_modules
-assets/ideas
+assets
+.env
+simple-webpage
