@@ -12,6 +12,9 @@ const UsersSchema = new Schema({
 		min: 1,
 		max: 7,
 	},
+	seed: {
+		type: Number,
+	},
 });
 
 const Users = mongoose.model("users", UsersSchema);

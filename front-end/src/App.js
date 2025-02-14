@@ -15,30 +15,40 @@ function App() {
 	}, []);
 
 	return (
-		<div className="App">
-			<div class="w3-container w3-content">
-				<div class="w3-row">
-					<div class="w3-col m3">
-						<div class="w3-card w3-round w3-white">
-							<div class="w3-container">
-								<h4 class="w3-center">Today is a...</h4>
+		<>
+			<div className="Main">
+				<div className="header row">
+					welcome to bones i'll fix this later
+				</div>
+				<div className="body row scroll-y">
+					<div className="App">
+						<div className="left-col">
+							<div className="day-type-box">
+								<h4>Today is a...</h4>
 							</div>
 						</div>
-					</div>
 
-					<div class="w3-col m7">
-						<div class="w3-container w3-card w3-white w3-round w3-margin">
+						<div className="right-col">
 							<h1>Hi! Sample UI</h1>
-							<ul>
-								{tasks.map((task) => (
-									<li key={task._id}> {task.action} </li>
-								))}
-							</ul>
+
+							{tasks.map((task) => (
+								<>
+									<input
+										type="checkbox"
+										id={task._id}
+									/>
+									<label for={task._id}>{task.action}</label>
+									<br></br>
+								</>
+							))}
 						</div>
 					</div>
 				</div>
+				<div className="footer row">
+					bye from bones i'll fix this later
+				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 
