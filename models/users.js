@@ -1,11 +1,20 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+import bcrypt from "bcrypt";
 
 const UsersSchema = new Schema({
 	username: {
 		type: String,
 		lowercase: true,
 		required: [true, "username is required."],
+	},
+	email: {
+		type: String,
+	},
+	password: {
+		type: String,
+		required: true,
+		minlength: 8,
 	},
 	frequency: {
 		type: Number,
@@ -15,7 +24,35 @@ const UsersSchema = new Schema({
 	seed: {
 		type: Number,
 	},
+	createdAt: {
+		type: Date,
+		default: Date.now,
+	},
 });
+
+UsersSchema.pre("save", async function (next) {
+	try {
+		// Check if the password has been modified
+		if (!this.isModified("password")) return next();
+
+		// Generate a salt and hash the password
+		const salt = await bcrypt.genSalt(10);
+		this.password = await bcrypt.hash(this.password, salt);
+
+		next(); // Proceed to save
+	} catch (error) {
+		next(error); // Pass any errors to the next middleware
+	}
+});
+
+UsersSchema.methods.isValidPassword = async function (password) {
+	try {
+		// Compare provided password with stored hash
+		return await bcrypt.compare(password, this.password);
+	} catch (error) {
+		throw new Error("Password comparison failed");
+	}
+};
 
 const Users = mongoose.model("users", UsersSchema);
 
