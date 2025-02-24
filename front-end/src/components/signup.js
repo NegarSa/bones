@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "./login.css";
 
-const Login = () => {
+const SignUp = () => {
 	const [input, setInput] = useState({
 		username: "",
 		password: "",
@@ -26,8 +25,7 @@ const Login = () => {
 	};
 
 	return (
-		<div className="wrapper">
-			<h1 className="title-text">Sign in!</h1>
+		<>
 			<form onSubmit={handleSubmitEvent}>
 				<div className="form_control">
 					<label htmlFor="user-email">Email:</label>
@@ -67,9 +65,10 @@ const Login = () => {
 				</div>
 				<button className="btn-submit">Submit</button>
 			</form>
-			<Link to="/signup">Don't have an accout? Sign Up!</Link>
-		</div>
+
+			<Link to="/signup">hi</Link>
+		</>
 	);
 };
 
-export default Login;
+export default SignUp;

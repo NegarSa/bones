@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Tasks = require("../models/tasks");
+const Users = require("../models/users");
 
 router.get("/tasks", (req, res, next) => {
 	Tasks.find({}, ["action", "status", "type_of_day"])

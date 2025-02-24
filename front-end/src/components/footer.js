@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function Header() {
+function Footer() {
 	const [type, setType] = useState(false);
 
-	return <>header! header! Hi!</>;
+	return <> no header! header! bye!</>;
 }
 
-export default Header;
+export default Footer;
