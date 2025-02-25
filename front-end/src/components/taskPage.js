@@ -1,12 +1,7 @@
-//import "./App.css";
-// import HeaderBar from "./headerbar.js";
-//import Body from "./body.js";
-// import Footer from "./footer.js";
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function App() {
+export default function TaskPage() {
 	const [tasks, setTasks] = useState([]);
 	const [type, setType] = useState(false);
 
@@ -17,16 +12,5 @@ function App() {
 			.catch((error) => console.error(error));
 	}, []);
 
-	return (
-		<div className="App">
-			<h1>Hi! Sample UI</h1>
-			<ul>
-				{tasks.map((task) => (
-					<li key={task._id}> {task.action} </li>
-				))}
-			</ul>
-		</div>
-	);
+	return <div className="task">This is supposed to be obe task info</div>;
 }
-
-export default App;

@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const Users = require("./users");
 
 const TasksSchema = new Schema({
 	action: {

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
 import Login from "./login.js";
 
-function TaskList(token, setToken) {
+export default function TaskList(token, setToken) {
 	const [tasks, setTasks] = useState([]);
 	const [type, setType] = useState(false);
 
@@ -13,7 +14,7 @@ function TaskList(token, setToken) {
 			.catch((error) => console.error(error));
 	}, []);
 
-	if (token) {
+	if (!token) {
 		return <Login setToken={setToken} />;
 	}
 
@@ -34,5 +35,3 @@ function TaskList(token, setToken) {
 		</>
 	);
 }
-
-export default TaskList;
