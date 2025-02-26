@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import Login from "./login.js";
+import Task from "./task.js";
+import "../styles/tasklist.css";
 
 export default function TaskList(token, setToken) {
 	const [tasks, setTasks] = useState([]);
@@ -19,19 +21,14 @@ export default function TaskList(token, setToken) {
 	}
 
 	return (
-		<>
-			<h1>Hi! Sample UI</h1>
-
+		<div className="tasklist">
 			{tasks.map((task) => (
-				<>
-					<input
-						type="checkbox"
-						id={task._id}
-					/>
-					<label for={task._id}>{task.action}</label>
-					<br></br>
-				</>
+				<Task
+					className="task"
+					task={task}
+					key={task._id}
+				/>
 			))}
-		</>
+		</div>
 	);
 }

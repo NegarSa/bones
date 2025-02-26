@@ -1,0 +1,25 @@
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+.sigmar-regular {
+    font-family: "Sigmar", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+.title{
+    font-family: "Sigmar";
+    width: 80%;
+    font-size: 2.65rem;
+    color: rgb(103, 89, 222);
+}
+
+nav > img {
+    margin: 20px 15px 10px 20px;;
+}
+header{
+    background-color: aliceblue;
+}
