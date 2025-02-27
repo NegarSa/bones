@@ -1,7 +1,6 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
 
-const TasksSchema = new Schema({
+const TasksSchema = new mongoose.Schema({
 	action: {
 		type: String,
 		required: [true, "Task description is required."],
@@ -31,4 +30,4 @@ const TasksSchema = new Schema({
 
 const Tasks = mongoose.model("tasks", TasksSchema);
 
-module.exports = Tasks;
+export default Tasks;

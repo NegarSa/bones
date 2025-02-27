@@ -1,5 +1,6 @@
 {
   "name": "bones",
+  "type": "module",
   "version": "1.0.0",
   "description": "A daily planner and task hub, but keeping in mind that some days are not a bones day.",
   "main": "index.js",

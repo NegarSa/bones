@@ -1,16 +1,23 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 export default function SignUp() {
 	const [input, setInput] = useState({
 		username: "",
+		email: "",
 		password: "",
 	});
 
 	const handleSubmitEvent = (e) => {
 		e.preventDefault();
 		if (input.username !== "" && input.password !== "") {
-			//dispatch action from hooks
+			axios
+				.post("http://localhost:8181/api/newuser", input)
+				.then((response) => {
+					console.log("res", response.data);
+				})
+				.catch((error) => console.error("Error creating user"));
 		}
-		alert("please provide a valid input");
 	};
 
 	const handleInput = (e) => {
@@ -41,6 +48,23 @@ export default function SignUp() {
 				>
 					Please enter a valid username. It must contain at least 6
 					characters.
+				</div>
+			</div>
+			<div className="form_control">
+				<label htmlFor="username">Username:</label>
+				<input
+					type="username"
+					id="username"
+					name="username"
+					aria-describedby="user-name"
+					aria-invalid="false"
+					onChange={handleInput}
+				/>
+				<div
+					id="user-name"
+					className="sr-only"
+				>
+					your username should be more than 6 character
 				</div>
 			</div>
 			<div className="form_control">

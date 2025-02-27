@@ -1,7 +1,6 @@
-const express = require("express");
-const router = express.Router();
-const Tasks = require("../models/tasks");
-const Users = require("../models/users");
+import { Router } from "express";
+const router = Router();
+import Tasks from "../models/tasks.js";
 
 router.get("/tasks", (req, res, next) => {
 	Tasks.find({}, ["action", "status", "type_of_day"])
@@ -34,4 +33,4 @@ router.post("/tasks", (req, res, next) => {
 	}
 });
 
-module.exports = router;
+export default router;
