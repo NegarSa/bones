@@ -33,4 +33,24 @@ router.post("/tasks", (req, res, next) => {
 	}
 });
 
+router.put("/:id", async (req, res, next) => {
+	try {
+		const { id } = req.params;
+
+		const event = await Tasks.findByIdAndUpdate(id, req.body, {
+			new: true,
+		});
+		if (!event) {
+			return res.status(400).json({
+				message: "Event not found",
+			});
+		}
+		res.json(event);
+	} catch (error) {
+		res.status(500).json({
+			error: error.message,
+		});
+	}
+});
+
 export default router;

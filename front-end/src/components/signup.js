@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+// TODO: Switch to form actions
 export default function SignUp() {
+	const navigate = useNavigate();
 	const [input, setInput] = useState({
 		username: "",
 		email: "",
 		password: "",
 	});
 
-	const handleSubmitEvent = (e) => {
+	const handleSubmitEvent = async (e) => {
 		e.preventDefault();
 		if (input.username !== "" && input.password !== "") {
 			axios
-				.post("http://localhost:8181/api/newuser", input)
+				.post("http://localhost:8181/api/users/newuser", input)
 				.then((response) => {
-					console.log("res", response.data);
+					alert("User created!");
+					navigate("/login");
 				})
 				.catch((error) => console.error("Error creating user"));
 		}

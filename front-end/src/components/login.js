@@ -1,28 +1,33 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/login.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+// TODO: Switch to form actions
 
 const Login = () => {
-	const [input, setInput] = useState({
-		username: "",
-		password: "",
-	});
+	const navigate = useNavigate();
 
-	const handleSubmitEvent = (e) => {
-		e.preventDefault();
-		if (input.username !== "" && input.password !== "") {
-			//dispatch action from hooks
+	const handleSubmitEvent = async (event) => {
+		event.preventDefault();
+		const formData = new FormData(event.currentTarget);
+		const email = formData.get("email");
+		const password = formData.get("password");
+		if (email !== "" && password !== "") {
+			axios
+				.post("http://localhost:8181/api/users/login", {
+					email: email,
+					password: password,
+				})
+				.then((response) => {
+					console.log(response);
+					if (response.status === 200) {
+						alert("Logined!");
+						navigate("/");
+					}
+				})
+				.catch((error) => console.error(error));
 		}
-		alert("please provide a valid input");
-	};
-
-	const handleInput = (e) => {
-		const { name, value } = e.target;
-
-		setInput((prev) => ({
-			...prev,
-			[name]: value,
-		}));
 	};
 
 	return (
@@ -33,12 +38,11 @@ const Login = () => {
 					<label htmlFor="user-email">Email:</label>
 					<input
 						type="email"
-						id="user-email"
+						id="email"
 						name="email"
 						placeholder="example@yahoo.com"
 						aria-describedby="user-email"
 						aria-invalid="false"
-						onChange={handleInput}
 					/>
 					<div
 						id="user-email"
@@ -56,7 +60,6 @@ const Login = () => {
 						name="password"
 						aria-describedby="user-password"
 						aria-invalid="false"
-						onChange={handleInput}
 					/>
 					<div
 						id="user-password"

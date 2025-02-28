@@ -1,6 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import Users from "../models/users.js";
+import bcrypt from "bcrypt";
 
 router.get("/users", (req, res, next) => {
 	Users.find({})
@@ -27,4 +28,27 @@ router.post("/newuser", async (req, res, next) => {
 		}
 	}
 });
+
+router.post("/login", async (req, res, next) => {
+	console.log(req.body);
+	if (req.body.email && req.body.password) {
+		const data = await Users.find({ email: req.body.email }, [
+			"email",
+			"password",
+		]);
+
+		if (!data.length) {
+			res.sendStatus(401);
+			return;
+		}
+		try {
+			await bcrypt.compare(req.body.password, data[0]["password"]);
+			res.sendStatus(200);
+		} catch (error) {
+			console.error("login failed:", error.message);
+			res.sendStatus(500);
+		}
+	}
+});
+
 export default router;

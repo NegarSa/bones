@@ -1,12 +1,21 @@
 import "../styles/task.css";
+import axios from "axios";
+
 export default function Task(props) {
 	const task = props.task;
-	function handlecheck(event) {}
+	function handlecheck(event) {
+		axios
+			.put("http://localhost:8181/api/tasks/" + task._id, {
+				status: event.target.checked,
+			})
+			.then((response) => console.log(response))
+			.catch((error) => console.log(error));
+	}
 	return (
 		<div className="task-box">
 			<div className="checkbox-wrapper">
 				<label
-					for={task._id}
+					htmlFor={task._id}
 					className="item"
 				>
 					<input
@@ -16,7 +25,7 @@ export default function Task(props) {
 						onChange={handlecheck}
 					/>
 					<label
-						for={task._id}
+						htmlFor={task._id}
 						className="cbx"
 					>
 						<svg
@@ -28,7 +37,7 @@ export default function Task(props) {
 						</svg>
 					</label>
 					<label
-						for={task._id}
+						htmlFor={task._id}
 						className="cbx-lbl"
 					>
 						{task.action}

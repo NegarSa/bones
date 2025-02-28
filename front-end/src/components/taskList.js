@@ -11,7 +11,7 @@ export default function TaskList(token, setToken) {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:8181/api/tasks")
+			.get("http://localhost:8181/api/tasks/tasks")
 			.then((response) => setTasks(response.data))
 			.catch((error) => console.error(error));
 	}, []);
