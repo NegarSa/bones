@@ -1,9 +1,51 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around ;
     height: 100%;
     width: 100%;
+    align-items:  center;
 }
 
+.title-text {
+    margin: 0px;
+    margin-top: 0;
+    color: rgb(4, 4, 111);
+    font-family: 'Sigmar';
+}
 
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    align-items:  center;
+    
+}
+
+form > div {
+    padding: 7px;
+}
+
+form > div >  label {
+    margin: 10px;
+    font-weight: 600;
+}
+
+form > button {
+    margin: 15px;
+    border-radius: 7px;
+    height: 40px;
+    width: 100px;
+    background-color: rgb(159, 159, 254);
+    border: 0;
+}
+
+#email, #password, #username{
+    border-radius: 5px;
+    height: 30px;
+    width: 200px;
+    border: 1px solid #ccc;
+    text-align: center;
+    background-color: white;
+}

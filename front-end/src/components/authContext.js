@@ -5,10 +5,9 @@ import { useContext } from "react";
 const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
-	const [user, setUser] = useState("");
+	const [user, setUser] = useState({});
 
 	const loginUser = async (email, password) => {
-		console.log(email);
 		if (email !== "" && password !== "") {
 			await axios
 				.post(
@@ -24,15 +23,15 @@ export default function AuthProvider({ children }) {
 				.then((response) => {
 					console.log(response);
 					if (response.status !== 200) {
-						console.log(response.status);
+						console.error(response.status);
 					}
-					setUser(getUser(response));
+					getUser();
 				})
 				.catch((error) => console.error(error));
 		}
 	};
 
-	const getUser = async (response) => {
+	const getUser = async () => {
 		try {
 			const response = await axios.get(
 				"http://localhost:8181/api/users/read",
@@ -40,10 +39,11 @@ export default function AuthProvider({ children }) {
 					withCredentials: true,
 				}
 			);
+			setUser(response.data);
 			return response.data;
 		} catch {
 			(err) => {
-				console.log(err);
+				console.error(err);
 			};
 		}
 	};
@@ -58,7 +58,7 @@ export default function AuthProvider({ children }) {
 			);
 		} catch {
 			(err) => {
-				console.log(err);
+				console.error(err);
 			};
 		}
 	}

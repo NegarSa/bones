@@ -1,14 +1,15 @@
-import { Link } from "react-router-dom";
 import { useAuth } from "./authContext";
 import "../styles/navBar.css";
 
 export default function Header() {
 	const { user } = useAuth();
+	const auth = useAuth();
 	const displayUser = () => {
-		if (user !== "") {
-			return user;
+		auth.getUser;
+		if (user.username) {
+			return user.username;
 		} else {
-			return "Please sign in ";
+			return "please sign in";
 		}
 	};
 	return (
@@ -22,6 +23,12 @@ export default function Header() {
 				/>
 				<span className="title">Bones?</span>
 				<span className="username">Hi {displayUser()}!</span>
+				<a
+					className="logg"
+					href={!user.username ? "/login" : "/"}
+				>
+					{!user.username ? "Login" : "LogOut"}
+				</a>
 			</nav>
 		</header>
 	);

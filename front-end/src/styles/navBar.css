@@ -23,7 +23,7 @@ nav > img {
 header{
     background-color: aliceblue;
 }
-.username{
+.username, .logg{
     margin: 10px;
     margin-bottom: 20px;
     font-size: medium;

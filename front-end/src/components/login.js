@@ -30,7 +30,7 @@ export default function Login() {
 			<h1 className="title-text">Sign in!</h1>
 			<form onSubmit={handleSubmitEvent}>
 				<div className="form_control">
-					<label htmlFor="user-email">Email:</label>
+					<label htmlFor="user-email">Email: </label>
 					<input
 						type="email"
 						id="email"
@@ -48,7 +48,7 @@ export default function Login() {
 					</div>
 				</div>
 				<div className="form_control">
-					<label htmlFor="password">Password:</label>
+					<label htmlFor="password">Password: </label>
 					<input
 						type="password"
 						id="password"
