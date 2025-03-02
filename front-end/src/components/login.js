@@ -1,32 +1,27 @@
 import { Link } from "react-router-dom";
 import "../styles/login.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./authContext";
 
 // TODO: Switch to form actions
 
-const Login = () => {
+export default function Login() {
 	const navigate = useNavigate();
+	const auth = useAuth();
 
 	const handleSubmitEvent = async (event) => {
 		event.preventDefault();
 		const formData = new FormData(event.currentTarget);
 		const email = formData.get("email");
 		const password = formData.get("password");
-		if (email !== "" && password !== "") {
-			axios
-				.post("http://localhost:8181/api/users/login", {
-					email: email,
-					password: password,
-				})
-				.then((response) => {
-					console.log(response);
-					if (response.status === 200) {
-						alert("Logined!");
-						navigate("/");
-					}
-				})
-				.catch((error) => console.error(error));
+
+		try {
+			auth.loginUser(email, password);
+			navigate("/");
+		} catch {
+			(err) => {
+				console.log(err);
+			};
 		}
 	};
 
@@ -73,6 +68,4 @@ const Login = () => {
 			<Link to="/signup">Don't have an accout? Sign Up!</Link>
 		</div>
 	);
-};
-
-export default Login;
+}

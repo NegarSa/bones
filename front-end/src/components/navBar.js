@@ -1,6 +1,16 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "./authContext";
 import "../styles/navBar.css";
+
 export default function Header() {
+	const { user } = useAuth();
+	const displayUser = () => {
+		if (user !== "") {
+			return user;
+		} else {
+			return "Please sign in ";
+		}
+	};
 	return (
 		<header>
 			<nav>
@@ -11,8 +21,7 @@ export default function Header() {
 					width="50px"
 				/>
 				<span className="title">Bones?</span>
-				<span>Option 1</span>
-				<span>Option 2</span>
+				<span className="username">Hi {displayUser()}!</span>
 			</nav>
 		</header>
 	);
