@@ -5,6 +5,9 @@ const TasksSchema = new mongoose.Schema({
 		type: String,
 		required: [true, "Task description is required."],
 	},
+	description: {
+		type: String,
+	},
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Users",

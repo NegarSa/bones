@@ -33,6 +33,19 @@ router.post("/tasks", (req, res, next) => {
 	}
 });
 
+router.get("/:id", async (req, res, next) => {
+	try {
+		const { id } = req.params;
+		Tasks.find({ _id: id })
+			.then((data) => res.json(data))
+			.catch(next);
+	} catch {
+		(error) => {
+			console.log(error);
+		};
+	}
+});
+
 router.put("/:id", async (req, res, next) => {
 	try {
 		const { id } = req.params;

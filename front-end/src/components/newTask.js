@@ -1,70 +1,73 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { useFormStatus } from "react-dom";
+import "../styles/login.css";
 
 export default function NewTask() {
 	const navigate = useNavigate();
+	const [task, setTask] = useState({});
+
+	function postTask(formData) {
+		axios
+			.post("http://localhost:8181/api/tasks/tasks/", {
+				action: formData.get("action"),
+				description: formData.get("description"),
+				deadline: formData.get("deadline"),
+				type_of_day: formData.get("type_of_day"),
+			})
+			.then((response) => {
+				console.log(response);
+				navigate("/");
+			})
+			.catch((error) => console.log(error));
+	}
+	function Submit() {
+		const { pending } = useFormStatus();
+		return (
+			<button
+				type="submit"
+				disabled={pending}
+			>
+				{pending ? "Submitting..." : "Submit"}
+			</button>
+		);
+	}
 
 	return (
-		<div className="wrapper">
-			<h1 className="title-text">New Task!</h1>
-			<form onSubmit={handleSubmitEvent}>
-				<div className="form_control">
-					<label htmlFor="user-email">Email:</label>
+		<>
+			<form action={postTask}>
+				<label>
+					Action:
 					<input
-						type="email"
-						id="email"
-						name="email"
-						placeholder="example@yahoo.com"
-						aria-describedby="user-email"
-						aria-invalid="false"
-						onChange={handleInput}
+						name="action"
+						type="text"
 					/>
-					<div
-						id="user-email"
-						className="sr-only"
-					>
-						Please enter a valid username. It must contain at least
-						6 characters.
-					</div>
-				</div>
-				<div className="form_control">
-					<label htmlFor="username">Username:</label>
+				</label>
+				<label>
+					Description:
 					<input
-						type="username"
-						id="username"
-						name="username"
-						aria-describedby="user-name"
-						aria-invalid="false"
-						onChange={handleInput}
+						name="description"
+						type="textbox"
 					/>
-					<div
-						id="user-name"
-						className="sr-only"
-					>
-						your username should be more than 6 character
-					</div>
-				</div>
-				<div className="form_control">
-					<label htmlFor="password">Password:</label>
+				</label>
+
+				<label>
+					Type of day:
+					<select name="type_of_day">
+						<option value="bones">bones</option>
+						<option value="no-bones">no bones</option>
+					</select>
+				</label>
+				<label>
+					Deadline:
 					<input
-						type="password"
-						id="password"
-						name="password"
-						aria-describedby="user-password"
-						aria-invalid="false"
-						onChange={handleInput}
+						name="deadline"
+						type="date"
 					/>
-					<div
-						id="user-password"
-						className="sr-only"
-					>
-						your password should be more than 6 character
-					</div>
-				</div>
-				<button className="btn-submit">Submit</button>
+				</label>
+				<Submit />
 			</form>
-			<Link to="/login">Have an account? Sign in!</Link>
-		</div>
+		</>
 	);
 }

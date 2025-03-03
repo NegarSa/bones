@@ -30,7 +30,7 @@ export default function TaskList(token, setToken) {
 					key={task._id}
 				/>
 			))}
-			<Link to="/taskPage">
+			<Link to="/task/new">
 				<button className="add-task"></button>
 			</Link>
 		</div>

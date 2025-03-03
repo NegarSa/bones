@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../styles/task.css";
 import axios from "axios";
 
@@ -59,20 +60,26 @@ export default function Task(props) {
 					</label>
 				</label>
 			</div>
-			<div className="checkbox-wrapper-10">
-				<input
-					className="tgl tgl-flip"
-					id={task._id + "bones"}
-					type="checkbox"
-					onChange={typeChange}
-					defaultChecked={task.type_of_day === "bones" ? 1 : 0}
-				/>
-				<label
-					className="tgl-btn"
-					data-tg-off="bones"
-					data-tg-on="bones"
-					htmlFor={task._id + "bones"}
-				></label>
+			<div className="details-wr">
+				<div className="details"></div>
+				<div className="checkbox-wrapper-10">
+					<input
+						className="tgl tgl-flip"
+						id={task._id + "bones"}
+						type="checkbox"
+						onChange={typeChange}
+						defaultChecked={task.type_of_day === "bones" ? 1 : 0}
+					/>
+					<label
+						className="tgl-btn"
+						data-tg-off="bones"
+						data-tg-on="bones"
+						htmlFor={task._id + "bones"}
+					></label>
+				</div>
+				<Link to={"/task/" + task._id}>
+					<button className={"update"}>Update</button>
+				</Link>
 			</div>
 		</div>
 	);

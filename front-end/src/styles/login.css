@@ -27,7 +27,7 @@ form > div {
     padding: 7px;
 }
 
-form > div >  label {
+form > div >  label , form > label{
     margin: 10px;
     font-weight: 600;
 }
@@ -41,7 +41,7 @@ form > button {
     border: 0;
 }
 
-#email, #password, #username{
+#email, #password, #username, input[type="text"]{
     border-radius: 5px;
     height: 30px;
     width: 200px;
