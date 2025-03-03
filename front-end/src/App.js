@@ -7,6 +7,7 @@ import Footer from "./components/footer";
 import Login from "./components/login";
 import DayType from "./components/sideBar";
 import TaskPage from "./components/taskPage";
+import NewTask from "./components/newTask";
 import SignUp from "./components/signup";
 import "./styles/App.css";
 
@@ -37,6 +38,10 @@ function App() {
 								<Route
 									path="/signup"
 									element={<SignUp />}
+								/>
+								<Route
+									path="/task/new"
+									element={<NewTask />}
 								/>
 								<Route
 									path="/task/:id"

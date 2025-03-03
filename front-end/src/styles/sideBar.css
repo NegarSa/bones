@@ -6,3 +6,12 @@ h1 {
     font-family: 'Sigmar';
 }
 
+.type {
+    width: 70%;
+}
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+}

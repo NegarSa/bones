@@ -2,13 +2,27 @@ import "../styles/task.css";
 import axios from "axios";
 
 export default function Task(props) {
-	const task = props.task;
+	let task = props.task;
+
+	function typeChange(event) {
+		axios
+			.put("http://localhost:8181/api/tasks/" + task._id, {
+				type_of_day: event.target.checked ? "bones" : "no bones",
+			})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => console.log(error));
+	}
+
 	function handlecheck(event) {
 		axios
 			.put("http://localhost:8181/api/tasks/" + task._id, {
 				status: event.target.checked,
 			})
-			.then((response) => console.log(response))
+			.then((response) => {
+				console.log(response);
+			})
 			.catch((error) => console.log(error));
 	}
 	return (
@@ -23,6 +37,7 @@ export default function Task(props) {
 						type="checkbox"
 						id={task._id}
 						onChange={handlecheck}
+						defaultChecked={task.status}
 					/>
 					<label
 						htmlFor={task._id}
@@ -44,7 +59,21 @@ export default function Task(props) {
 					</label>
 				</label>
 			</div>
-			<span className="details">Date: {task.date_created}</span>
+			<div className="checkbox-wrapper-10">
+				<input
+					className="tgl tgl-flip"
+					id={task._id + "bones"}
+					type="checkbox"
+					onChange={typeChange}
+					defaultChecked={task.type_of_day === "bones" ? 1 : 0}
+				/>
+				<label
+					className="tgl-btn"
+					data-tg-off="bones"
+					data-tg-on="bones"
+					htmlFor={task._id + "bones"}
+				></label>
+			</div>
 		</div>
 	);
 }

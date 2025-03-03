@@ -3,7 +3,7 @@ const router = Router();
 import Tasks from "../models/tasks.js";
 
 router.get("/tasks", (req, res, next) => {
-	Tasks.find({}, ["action", "status", "type_of_day"])
+	Tasks.find({})
 		.then((data) => res.json(data))
 		.catch(next);
 });

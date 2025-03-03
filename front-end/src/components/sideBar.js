@@ -30,13 +30,28 @@ function DayType(token, setToken) {
 	};
 
 	return (
-		<>
+		<div className="wrapper">
 			<h1>
 				Today, <br></br>
 				{new Date().toLocaleDateString()}, <br></br>is a {displayType()}{" "}
 				day!{" "}
 			</h1>
-		</>
+			{type ? (
+				<img
+					className="type img"
+					src="https://i.ibb.co/Q3TZLJZC/finalbones1.png"
+					alt="bones day"
+					border="0"
+				></img>
+			) : (
+				<img
+					className="type img"
+					src="https://i.ibb.co/spMf3RjC/finalnobones1.png"
+					alt="no bones day"
+					border="0"
+				></img>
+			)}
+		</div>
 	);
 }
 

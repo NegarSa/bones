@@ -3,13 +3,24 @@
     flex-direction: column;
     margin: 50px;
     justify-content: center;
+    align-items: flex-end;
 }
 .task{
     margin: 100px;
-    justify-content: center;
-
 }
 .task > label {
     margin: 100px;
 }
 
+
+.add-task{
+    background-image: url(https://img.icons8.com/windows/32/add--v1.png);
+    width: 40px;
+    height: 40px;
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+    border: 0;
+    background-color: inherit;
+    position: absolute;
+    bottom: 70px;
+  }

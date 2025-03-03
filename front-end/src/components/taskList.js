@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "./authContext.js";
+import { Link } from "react-router-dom";
 
 import Login from "./login.js";
 import Task from "./task.js";
@@ -7,8 +9,7 @@ import "../styles/tasklist.css";
 
 export default function TaskList(token, setToken) {
 	const [tasks, setTasks] = useState([]);
-	const [type, setType] = useState(false);
-
+	const { user } = useAuth();
 	useEffect(() => {
 		axios
 			.get("http://localhost:8181/api/tasks/tasks")
@@ -16,7 +17,7 @@ export default function TaskList(token, setToken) {
 			.catch((error) => console.error(error));
 	}, []);
 
-	if (!token) {
+	if (!user.username) {
 		return <Login setToken={setToken} />;
 	}
 
@@ -29,6 +30,9 @@ export default function TaskList(token, setToken) {
 					key={task._id}
 				/>
 			))}
+			<Link to="/taskPage">
+				<button className="add-task"></button>
+			</Link>
 		</div>
 	);
 }

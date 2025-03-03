@@ -17,7 +17,7 @@ export default function Header() {
 			<nav>
 				<img
 					src="https://i.ibb.co/4nTc7Td4/android-chrome-192x192.png"
-					alt="android-chrome-192x192"
+					alt="bones app logo"
 					border="0"
 					width="50px"
 				/>
