@@ -1,11 +1,21 @@
 import axios from "axios";
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { useContext } from "react";
 
 const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
 	const [user, setUser] = useState({});
+
+	useEffect(() => {
+		if (!user.username) {
+			try {
+				getUser();
+			} catch {
+				console.log("login!");
+			}
+		}
+	});
 
 	const loginUser = async (email, password) => {
 		if (email !== "" && password !== "") {
@@ -40,7 +50,7 @@ export default function AuthProvider({ children }) {
 				}
 			);
 			setUser(response.data);
-			return response.data;
+			return response;
 		} catch {
 			(err) => {
 				console.error(err);

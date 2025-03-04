@@ -25,30 +25,28 @@ function App() {
 					</div>
 
 					<div className="right-col">
-						<BrowserRouter>
-							<Routes>
-								<Route
-									path="/"
-									element={<TaskList />}
-								/>
-								<Route
-									path="/login"
-									element={<Login />}
-								/>
-								<Route
-									path="/signup"
-									element={<SignUp />}
-								/>
-								<Route
-									path="/task/new"
-									element={<NewTask />}
-								/>
-								<Route
-									path="/task/:id"
-									element={<TaskPage />}
-								/>
-							</Routes>
-						</BrowserRouter>
+						<Routes>
+							<Route
+								path="/"
+								element={<TaskList />}
+							/>
+							<Route
+								path="/login"
+								element={<Login />}
+							/>
+							<Route
+								path="/signup"
+								element={<SignUp />}
+							/>
+							<Route
+								path="/task/new"
+								element={<NewTask />}
+							/>
+							<Route
+								path="/task/:id"
+								element={<TaskPage />}
+							/>
+						</Routes>
 					</div>
 				</div>
 			</div>
