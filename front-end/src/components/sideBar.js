@@ -30,7 +30,7 @@ function DayType(token, setToken) {
 	};
 
 	return (
-		<div className="wrapper">
+		<div className="wrapperside">
 			<h1>
 				Today, <br></br>
 				{new Date().toLocaleDateString()}, <br></br>is a {displayType()}{" "}

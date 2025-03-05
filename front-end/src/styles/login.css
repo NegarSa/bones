@@ -1,12 +1,16 @@
-.wrapper {
+.wrapperlogin {
     display: flex;
     flex-direction: column;
-    justify-content: space-around ;
+    justify-content: center ;
     height: 100%;
     width: 100%;
     align-items:  center;
 }
-
+.wrappertask{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .title-text {
     margin: 0px;
     margin-top: 0;
@@ -32,6 +36,15 @@ form > div >  label , form > label{
     font-weight: 600;
 }
 
+.deletebtn{
+    margin: 15px;
+    border-radius: 7px;
+    height: 40px;
+    width: 100px;
+    background-color: rgb(253, 66, 66);
+    border: 0;
+}
+
 form > button {
     margin: 15px;
     border-radius: 7px;
@@ -41,11 +54,19 @@ form > button {
     border: 0;
 }
 
-#email, #password, #username, input[type="text"]{
+#email, #password, #username, input[type="text"], input{
     border-radius: 5px;
     height: 30px;
     width: 200px;
     border: 1px solid #ccc;
     text-align: center;
     background-color: white;
+    margin: 5px;
 }
+ .selector {
+    border: 0;
+    background-color: inherit;
+    width: 100px;
+    height: 60px;
+    text-align: center ;
+ }

@@ -15,7 +15,7 @@ export default function AuthProvider({ children }) {
 				console.log("login!");
 			}
 		}
-	});
+	}, []);
 
 	const loginUser = async (email, password) => {
 		if (email !== "" && password !== "") {
@@ -60,6 +60,7 @@ export default function AuthProvider({ children }) {
 
 	async function logoutUser() {
 		try {
+			console.log("here");
 			const response = await axios.get(
 				"http://localhost:8181/api/users/clear",
 				{

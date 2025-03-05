@@ -1,11 +1,21 @@
 import { Router } from "express";
 const router = Router();
 import Tasks from "../models/tasks.js";
+import jwt from "jsonwebtoken";
 
-router.get("/tasks", (req, res, next) => {
-	Tasks.find({})
-		.then((data) => res.json(data))
-		.catch(next);
+router.get("/tasks", async (req, res, next) => {
+	if (jwt.decode(req.signedCookies["jwt"])) {
+		const u_id = jwt.decode(req.signedCookies["jwt"])["user"]._id;
+		try {
+			const data = await Tasks.find({ user: u_id });
+			res.json(data);
+		} catch {
+			(error) => console.error(error);
+			res.status(500).send();
+		}
+	} else {
+		res.sendStatus(401);
+	}
 });
 
 router.get("/bones", (req, res, next) => {
@@ -59,6 +69,18 @@ router.put("/:id", async (req, res, next) => {
 			});
 		}
 		res.json(event);
+	} catch (error) {
+		res.status(500).json({
+			error: error.message,
+		});
+	}
+});
+
+router.delete("/:id", async (req, res, next) => {
+	try {
+		const { id } = req.params;
+		await Tasks.findByIdAndDelete(id);
+		res.status(200).send();
 	} catch (error) {
 		res.status(500).json({
 			error: error.message,

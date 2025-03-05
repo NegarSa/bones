@@ -38,7 +38,7 @@ html, body {
   width: 20%;
   box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   border-radius:10px;
-  margin: 16px 16px 16px 16px
+  margin: 0px 16px 16px 16px;
 }
 
 .right-col {
@@ -48,7 +48,7 @@ html, body {
   flex: 1 1 auto;
   box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   border-radius:10px;
-  margin: 16px;
+  margin: 0px 16px 16px 16px;
   display: fkex;
 }
 
@@ -59,8 +59,6 @@ html, body {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {

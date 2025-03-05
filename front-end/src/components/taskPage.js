@@ -40,6 +40,18 @@ export default function TaskPage() {
 			})
 			.catch((error) => console.log(error));
 	}
+
+	async function deleteTask() {
+		try {
+			const r = await axios.delete(
+				`http://localhost:8181/api/tasks/${id}`
+			);
+			console.log(r);
+			navigate("/");
+		} catch {
+			console.log("fail");
+		}
+	}
 	function Submit() {
 		const { pending } = useFormStatus();
 		return (
@@ -53,7 +65,7 @@ export default function TaskPage() {
 	}
 
 	return (
-		<>
+		<div className="wrappertask">
 			<form action={updateTask}>
 				<label>
 					Action:
@@ -74,7 +86,10 @@ export default function TaskPage() {
 
 				<label>
 					Type of day:
-					<select name="type_of_day">
+					<select
+						className="selector"
+						name="type_of_day"
+					>
 						<option value="bones">bones</option>
 						<option value="no-bones">no bones</option>
 					</select>
@@ -89,6 +104,12 @@ export default function TaskPage() {
 				</label>
 				<Submit />
 			</form>
-		</>
+			<button
+				className="deletebtn"
+				onClick={deleteTask}
+			>
+				DELETE
+			</button>
+		</div>
 	);
 }

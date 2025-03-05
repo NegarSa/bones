@@ -1,40 +1,58 @@
 import { useAuth } from "./authContext";
 import "../styles/navBar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Header() {
+	const navigate = useNavigate();
 	const { user } = useAuth();
 	const auth = useAuth();
-	const displayUser = () => {
-		auth.getUser;
+	async function logout() {
+		await auth.logoutUser();
+		navigate("/login");
+	}
+	function NavOptions() {
 		if (user.username) {
-			return user.username;
+			return (
+				<div className="options">
+					<button
+						className="logg"
+						onClick={logout}
+					>
+						Logout
+					</button>
+				</div>
+			);
 		} else {
-			return "please sign in";
+			return (
+				<div className="options">
+					<Link to="/login">
+						<button className="logg">Login</button>
+					</Link>
+				</div>
+			);
 		}
-	};
+	}
+
 	return (
 		<header>
 			<nav>
-				<div className="logo">
-					<img
-						src="https://i.ibb.co/4nTc7Td4/android-chrome-192x192.png"
-						alt="bones app logo"
-						border="0"
-						width="50px"
-					/>
-					<Link to="/">
+				<Link to="/">
+					<div className="logo">
+						<img
+							src="https://i.ibb.co/4nTc7Td4/android-chrome-192x192.png"
+							alt="bones app logo"
+							border="0"
+							width="50px"
+						/>
+
 						<span className="title">Bones?</span>
-					</Link>
-				</div>
+					</div>
+				</Link>
 				<div className="end-nav">
-					<span className="username">Hi {displayUser()}!</span>
-					<a
-						className="logg"
-						href={!user.username ? "/login" : "/logout"}
-					>
-						{!user.username ? "Login" : "LogOut"}
-					</a>
+					<span className="username">
+						Hi {user.username ? user.username : "please log in"}!
+					</span>
+					<NavOptions />
 				</div>
 			</nav>
 		</header>

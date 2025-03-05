@@ -16,7 +16,8 @@ export default function Login() {
 		const password = formData.get("password");
 
 		try {
-			auth.loginUser(email, password);
+			await auth.loginUser(email, password);
+
 			navigate("/");
 		} catch {
 			(err) => {
@@ -26,7 +27,7 @@ export default function Login() {
 	};
 
 	return (
-		<div className="wrapper">
+		<div className="wrapperlogin">
 			<h1 className="title-text">Sign in!</h1>
 			<form onSubmit={handleSubmitEvent}>
 				<div className="form_control">

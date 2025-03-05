@@ -3,14 +3,16 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useFormStatus } from "react-dom";
 import "../styles/login.css";
+import { useAuth } from "./authContext";
 
 export default function NewTask() {
 	const navigate = useNavigate();
-	const [task, setTask] = useState({});
+	const { user } = useAuth();
 
 	function postTask(formData) {
 		axios
 			.post("http://localhost:8181/api/tasks/tasks/", {
+				user: user._id,
 				action: formData.get("action"),
 				description: formData.get("description"),
 				deadline: formData.get("deadline"),
