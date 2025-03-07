@@ -22,12 +22,7 @@ export default function TaskList(token, setToken) {
 	}, []);
 
 	if (!loggedin && !loading) {
-		return (
-			<Navigate
-				to="/login"
-				replace={true}
-			/>
-		);
+		return <Login />;
 	}
 	if (loading) {
 		return <>Loading! Please wait! </>;
