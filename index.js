@@ -37,6 +37,8 @@ app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 });
 
+app.use(express.static("./front-end/build"));
+
 app.use("/api/tasks", routes_tasks);
 app.use("/api/users", routes_users);
 
