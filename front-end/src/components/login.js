@@ -1,13 +1,21 @@
 import { Link } from "react-router-dom";
 import "../styles/login.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "./authContext";
+import React, { useState, useEffect } from "react";
 
 // TODO: Switch to form actions
 
 export default function Login() {
 	const navigate = useNavigate();
 	const auth = useAuth();
+	const [loading, setLoading] = useState(1);
+
+	const { loggedin } = useAuth();
+
+	useEffect(() => {
+		setLoading(0);
+	}, []);
 
 	const handleSubmitEvent = async (event) => {
 		event.preventDefault();
@@ -25,7 +33,14 @@ export default function Login() {
 			};
 		}
 	};
-
+	if (loggedin && !loading) {
+		return (
+			<Navigate
+				to="/"
+				replace={true}
+			/>
+		);
+	}
 	return (
 		<div className="wrapperlogin">
 			<h1 className="title-text">Sign in!</h1>

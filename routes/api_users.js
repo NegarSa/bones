@@ -4,19 +4,35 @@ import Users from "../models/users.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-function sfc32(a, b, c, d) {
+function Alea(seed) {
+	if (seed === undefined) {
+		seed = +new Date() + Math.random();
+	}
+	function Mash() {
+		var n = 4022871197;
+		return function (r) {
+			for (var f, t, s, u = 0, e = 0.02519603282416938; u < r.length; u++)
+				(s = r.charCodeAt(u)),
+					(f = e * (n += s) - ((n * e) | 0)),
+					(n =
+						4294967296 * ((t = f * ((e * n) | 0)) - (t | 0)) +
+						(t | 0));
+			return (n | 0) * 2.3283064365386963e-10;
+		};
+	}
+
+	var m = Mash(),
+		a = m(" "),
+		b = m(" "),
+		c = m(" "),
+		x = 1,
+		y;
+	(seed = seed.toString()), (a -= m(seed)), (b -= m(seed)), (c -= m(seed));
+	a < 0 && a++, b < 0 && b++, c < 0 && c++;
 	return function () {
-		a |= 0;
-		b |= 0;
-		c |= 0;
-		d |= 0;
-		let t = (((a + b) | 0) + d) | 0;
-		d = (d + 1) | 0;
-		a = b ^ (b >>> 9);
-		b = (c + (c << 3)) | 0;
-		c = (c << 21) | (c >>> 11);
-		c = (c + t) | 0;
-		return t >>> 0;
+		var y = x * 2.3283064365386963e-10 + a * 2091639;
+		(a = b), (b = c);
+		return (c = y - (x = y | 0));
 	};
 }
 
@@ -77,7 +93,7 @@ router.post("/login", async (req, res, next) => {
 
 router.get("/read", (req, res, next) => {
 	if (jwt.decode(req.signedCookies["jwt"])) {
-		res.json(jwt.decode(req.signedCookies["jwt"])["user"]);
+		res.json(jwt.decode(req.signedCookies["jwt"]));
 	} else {
 		res.sendStatus(401);
 	}
@@ -86,14 +102,18 @@ router.get("/read", (req, res, next) => {
 router.get("/day", (req, res, next) => {
 	if (jwt.decode(req.signedCookies["jwt"])) {
 		const user = jwt.decode(req.signedCookies["jwt"])["user"];
-		var now = new Date();
+		const now = new Date();
 		res.json(
-			sfc32(
-				user.seed,
-				now.getDay(),
-				now.getMonth(),
-				now.getFullYear()
-			)() % 2
+			Alea(
+				now.getDay * 10000 +
+					now.getMonth() * 10000 +
+					now.getFullYear() +
+					user.seed
+			) *
+				6 >
+				user.frequency
+				? 1
+				: 0
 		);
 	} else {
 		res.sendStatus(401);
@@ -102,6 +122,38 @@ router.get("/day", (req, res, next) => {
 
 router.get("/clear", async (req, res, next) => {
 	res.clearCookie("jwt").end();
+});
+
+router.put("/:id", async (req, res, next) => {
+	try {
+		const { id } = req.params;
+
+		const event = await Users.findByIdAndUpdate(id, req.body, {
+			new: true,
+		});
+		if (!event) {
+			return res.status(400).json({
+				message: "User not found",
+			});
+		}
+		res.json(event);
+	} catch (error) {
+		res.status(500).json({
+			error: error.message,
+		});
+	}
+});
+
+router.delete("/:id", async (req, res, next) => {
+	try {
+		const { id } = req.params;
+		await Users.findByIdAndDelete(id);
+		res.status(200).send();
+	} catch (error) {
+		res.status(500).json({
+			error: error.message,
+		});
+	}
 });
 
 export default router;

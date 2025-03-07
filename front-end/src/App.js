@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import TaskList from "./components/taskList";
@@ -9,11 +9,11 @@ import DayType from "./components/sideBar";
 import TaskPage from "./components/taskPage";
 import NewTask from "./components/newTask";
 import SignUp from "./components/signup";
+import Dashboard from "./components/dashboard";
+
 import "./styles/App.css";
 
 function App() {
-	const [token, setToken] = useState(0);
-
 	return (
 		<div className="Main">
 			<Header />
@@ -26,6 +26,10 @@ function App() {
 
 					<div className="right-col">
 						<Routes>
+							<Route
+								path="/dashboard"
+								element={<Dashboard />}
+							/>
 							<Route
 								path="/"
 								element={<TaskList />}

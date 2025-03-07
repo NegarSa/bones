@@ -4,16 +4,19 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Header() {
 	const navigate = useNavigate();
-	const { user } = useAuth();
+	const { user, loggedin } = useAuth();
 	const auth = useAuth();
 	async function logout() {
 		await auth.logoutUser();
 		navigate("/login");
 	}
 	function NavOptions() {
-		if (user.username) {
+		if (loggedin) {
 			return (
 				<div className="options">
+					<Link to="/dashboard">
+						<span className="username">Hi {user.username}!</span>
+					</Link>
 					<button
 						className="logg"
 						onClick={logout}
@@ -25,6 +28,7 @@ export default function Header() {
 		} else {
 			return (
 				<div className="options">
+					<span className="username">Hi, please log in!</span>
 					<Link to="/login">
 						<button className="logg">Login</button>
 					</Link>
@@ -49,9 +53,6 @@ export default function Header() {
 					</div>
 				</Link>
 				<div className="end-nav">
-					<span className="username">
-						Hi {user.username ? user.username : "please log in"}!
-					</span>
 					<NavOptions />
 				</div>
 			</nav>

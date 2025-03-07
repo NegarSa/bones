@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "./authContext.js";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import Login from "./login.js";
 import Task from "./task.js";
@@ -9,16 +9,28 @@ import "../styles/tasklist.css";
 
 export default function TaskList(token, setToken) {
 	const [tasks, setTasks] = useState([]);
-	const { user } = useAuth();
+	const [loading, setLoading] = useState(1);
+	const { user, loggedin } = useAuth();
 	useEffect(() => {
 		axios
 			.get("http://localhost:8181/api/tasks/tasks")
-			.then((response) => setTasks(response.data))
+			.then((response) => {
+				setTasks(response.data);
+				setLoading(0);
+			})
 			.catch((error) => console.error(error));
 	}, []);
 
-	if (!user.username) {
-		return <Login setToken={setToken} />;
+	if (!loggedin && !loading) {
+		return (
+			<Navigate
+				to="/login"
+				replace={true}
+			/>
+		);
+	}
+	if (loading) {
+		return <>Loading! Please wait! </>;
 	}
 
 	return (
