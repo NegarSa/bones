@@ -12,7 +12,7 @@ export default function Dashboard() {
 	const { user, loggedin } = useAuth();
 	useEffect(() => {
 		axios
-			.get("http://localhost:8181/api/users/read")
+			.get("/api/users/read")
 			.then((response) => {
 				if (response.data.email !== user.email) {
 					return <>Log in to see your dashboard!</>;
@@ -26,7 +26,7 @@ export default function Dashboard() {
 
 	async function updateUser(formData) {
 		await axios
-			.put(`http://localhost:8181/api/users/${user._id}`, {
+			.put(`/api/users/${user._id}`, {
 				username: formData.get("username"),
 				frequency: formData.get("frequency"),
 			})
@@ -40,9 +40,7 @@ export default function Dashboard() {
 
 	async function deleteUser() {
 		try {
-			const r = await axios.delete(
-				`http://localhost:8181/api/users/${id}`
-			);
+			const r = await axios.delete(`/api/users/${id}`);
 			console.log(r);
 			navigate("/");
 		} catch {

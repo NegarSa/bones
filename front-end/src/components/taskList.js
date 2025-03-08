@@ -13,7 +13,7 @@ export default function TaskList(token, setToken) {
 	const { user, loggedin } = useAuth();
 	useEffect(() => {
 		axios
-			.get("http://localhost:8181/api/tasks/tasks")
+			.get("/api/tasks/tasks")
 			.then((response) => {
 				setTasks(response.data);
 				setLoading(0);

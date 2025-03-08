@@ -12,7 +12,7 @@ export default function TaskPage() {
 
 	useEffect(() => {
 		axios
-			.get(`http://localhost:8181/api/tasks/${id}`)
+			.get(`/api/tasks/${id}`)
 			.then((response) => {
 				setTask(response.data[0]);
 				try {
@@ -28,7 +28,7 @@ export default function TaskPage() {
 
 	function updateTask(formData) {
 		axios
-			.put(`http://localhost:8181/api/tasks/${id}`, {
+			.put(`/api/tasks/${id}`, {
 				action: formData.get("action"),
 				description: formData.get("description"),
 				deadline: formData.get("deadline"),
@@ -43,9 +43,7 @@ export default function TaskPage() {
 
 	async function deleteTask() {
 		try {
-			const r = await axios.delete(
-				`http://localhost:8181/api/tasks/${id}`
-			);
+			const r = await axios.delete(`/api/tasks/${id}`);
 			console.log(r);
 			navigate("/");
 		} catch {

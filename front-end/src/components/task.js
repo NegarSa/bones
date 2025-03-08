@@ -7,7 +7,7 @@ export default function Task(props) {
 
 	function typeChange(event) {
 		axios
-			.put("http://localhost:8181/api/tasks/" + task._id, {
+			.put("/api/tasks/" + task._id, {
 				type_of_day: event.target.checked ? "bones" : "no bones",
 			})
 			.then((response) => {
@@ -18,7 +18,7 @@ export default function Task(props) {
 
 	function handlecheck(event) {
 		axios
-			.put("http://localhost:8181/api/tasks/" + task._id, {
+			.put("/api/tasks/" + task._id, {
 				status: event.target.checked,
 			})
 			.then((response) => {

@@ -16,7 +16,7 @@ export default function SignUp() {
 		e.preventDefault();
 		if (input.username !== "" && input.password !== "") {
 			await axios
-				.post("http://localhost:8181/api/users/newuser", input)
+				.post("/api/users/newuser", input)
 				.then((response) => {
 					alert("User created!");
 					navigate("/login");

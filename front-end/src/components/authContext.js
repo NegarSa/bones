@@ -29,7 +29,7 @@ export default function AuthProvider({ children }) {
 		if (email !== "" && password !== "") {
 			await axios
 				.post(
-					"http://localhost:8181/api/users/login",
+					"/api/users/login",
 					{
 						email: email,
 						password: password,
@@ -57,12 +57,9 @@ export default function AuthProvider({ children }) {
 
 	async function getUser() {
 		try {
-			const response = await axios.get(
-				"http://localhost:8181/api/users/read",
-				{
-					withCredentials: true,
-				}
-			);
+			const response = await axios.get("/api/users/read", {
+				withCredentials: true,
+			});
 			if (response.status === 401) {
 				setLoggedin(0);
 				return 0;
@@ -82,7 +79,7 @@ export default function AuthProvider({ children }) {
 
 	function getTypeOfDay() {
 		axios
-			.get("http://localhost:8181/api/users/day", {
+			.get("/api/users/day", {
 				withCredentials: true,
 			})
 			.then((response) => {
@@ -102,12 +99,9 @@ export default function AuthProvider({ children }) {
 	async function logoutUser() {
 		try {
 			console.log("here");
-			const response = await axios.get(
-				"http://localhost:8181/api/users/clear",
-				{
-					withCredentials: true,
-				}
-			);
+			const response = await axios.get("/api/users/clear", {
+				withCredentials: true,
+			});
 			setLoggedin(0);
 		} catch {
 			(err) => {

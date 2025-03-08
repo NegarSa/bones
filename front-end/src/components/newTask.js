@@ -11,7 +11,7 @@ export default function NewTask() {
 
 	function postTask(formData) {
 		axios
-			.post("http://localhost:8181/api/tasks/tasks/", {
+			.post("/api/tasks/tasks/", {
 				user: user._id,
 				action: formData.get("action"),
 				description: formData.get("description"),
