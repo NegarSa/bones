@@ -27,7 +27,15 @@ app.use(
 	})
 );
 app.use(json());
-mongoose.connect(process.env.ATLAS_URI);
+
+mongoose
+	.connect(process.env.ATLAS_URI)
+	.then(() => {
+		console.log("Atlas DB Connected...");
+	})
+	.catch((err) => {
+		console.log("Atlas DB connection failed...", err);
+	});
 
 mongoose.connection.once("open", () => {
 	console.log("MongoDB database connection established successfully");
