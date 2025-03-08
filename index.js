@@ -16,8 +16,6 @@ app.use(
 	cors({
 		origin: [
 			"https://bones-app-cra6gdf2f3fzeddb.canadacentral-01.azurewebsites.net",
-			"http://localhost:3000",
-			"http://127.0.0.1:3000",
 		],
 		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 		allowedHeaders: [
