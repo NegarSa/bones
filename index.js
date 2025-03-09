@@ -52,6 +52,10 @@ app.use(express.static("./front-end/build"));
 app.use("/api/tasks", routes_tasks);
 app.use("/api/users", routes_users);
 
+app.get("/*", function (req, res) {
+	res.sendFile(path.join(__dirname, "./front-end/build", "index.html"));
+});
+
 app.use((err, req, res, next) => {
 	console.log(err);
 	next();
