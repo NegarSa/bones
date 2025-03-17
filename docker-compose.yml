@@ -1,0 +1,16 @@
+name: "bones"
+services:
+  bones:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - .:/home/node/app/
+      - ./nodemon.json:/home/node/app/nodemon.json
+    container_name: bones
+    expose:
+      - '8181'
+    ports:
+      - '8181:8181'
+    command: npm run dev
