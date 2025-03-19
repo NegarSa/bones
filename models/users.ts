@@ -1,7 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { Error } from "mongoose";
 import bcrypt from "bcrypt";
 
-const UsersSchema = new mongoose.Schema({
+export interface User extends mongoose.Document {
+	username: string,
+	email: string,
+	password: string,
+	frequency: Number,
+	seed: Number,
+	createdAt: Date,
+}
+
+const UsersSchema = new mongoose.Schema<User>({
 	username: {
 		type: String,
 		lowercase: true,
@@ -41,7 +50,7 @@ UsersSchema.pre("save", async function (next) {
 		this.password = await bcrypt.hash(this.password, salt);
 
 		next(); // Proceed to save
-	} catch (error) {
+	} catch (error: any) {
 		next(error); // Pass any errors to the next middleware
 	}
 });
@@ -55,5 +64,5 @@ UsersSchema.methods.isValidPassword = async function (password: string) {
 	}
 };
 
-const Users = mongoose.model("users", UsersSchema);
+const Users = mongoose.model<User>("users", UsersSchema);
 export default Users;

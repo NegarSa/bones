@@ -1,6 +1,18 @@
 import mongoose from "mongoose";
 
-const TasksSchema = new mongoose.Schema({
+export interface Task extends mongoose.Document {
+	action: string,
+	description: string,
+	status: boolean,
+	progress: Number,
+	type_of_day: "bones"|"no bones"|"both",
+	deadline: Date,
+	date_created: Date,
+	user: mongoose.Schema.Types.ObjectId,
+	subtasks: [mongoose.Schema.Types.ObjectId],
+}
+
+const TasksSchema = new mongoose.Schema<Task>({
 	action: {
 		type: String,
 		required: [true, "Task description is required."],
@@ -14,7 +26,7 @@ const TasksSchema = new mongoose.Schema({
 	},
 	status: {
 		type: Boolean,
-		default: 0,
+		default: false,
 		required: [true, "Every task has a status."],
 	},
     progress:{
@@ -40,6 +52,6 @@ const TasksSchema = new mongoose.Schema({
 	},
 });
 
-const Tasks = mongoose.model("tasks", TasksSchema);
+const Tasks = mongoose.model<Task>("tasks", TasksSchema);
 
 export default Tasks;

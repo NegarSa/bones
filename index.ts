@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 
+import task_routes from "./api/task_routes.js";
+import user_routes from "./api/user_routes.js";
+
 
 dotenv.config();
 
@@ -43,15 +46,20 @@ else {
     console.log("No Atlas URI providied for connection to the database.")
 }
 
+app.get('/', (request, response) => {
+	response.send('Hello world!');
+  });
+
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 });
 
+
 // React routes for later
 // app.use(express.static("./front-end/build"));
 
-// app.use("/api/tasks", routes_tasks);
-// app.use("/api/users", routes_users);
+app.use("/api/tasks", task_routes);
+app.use("/api/users", user_routes);
 
 // app.get("/*", function (req: Request, res: Response) {
 // 	res.sendFile(path.join(__dirname, "./front-end/build", "index.html"));
