@@ -1,16 +1,17 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 
-import task_routes from "./api/task_routes.js";
-import user_routes from "./api/user_routes.js";
-
+import task_routes from "./api/task_routes";
+import user_routes from "./api/user_routes";
 
 dotenv.config();
 
-
 const app = express();
+app.use(express.json());
+app.use(cookieParser(process.env.cookie));
 const PORT = process.env.PORT || 5000;
 
 app.use(
@@ -28,32 +29,30 @@ app.use(
 	})
 );
 
-if (process.env.ATLAS_URI !== undefined){
-    mongoose
-        .connect(process.env.ATLAS_URI)
-        .then(() => {
-            console.log("Atlas DB Connected...");
-        })
-        .catch((err) => {
-            console.log("Atlas DB connection failed...", err);
-        });
+if (process.env.ATLAS_URI !== undefined) {
+	mongoose
+		.connect(process.env.ATLAS_URI)
+		.then(() => {
+			console.log("Atlas DB Connected...");
+		})
+		.catch((err) => {
+			console.log("Atlas DB connection failed...", err);
+		});
 
-    mongoose.connection.once("open", () => {
-        console.log("MongoDB database connection established successfully");
-    });
-}
-else {
-    console.log("No Atlas URI providied for connection to the database.")
+	mongoose.connection.once("open", () => {
+		console.log("MongoDB database connection established successfully");
+	});
+} else {
+	console.log("No Atlas URI providied for connection to the database.");
 }
 
-app.get('/', (request, response) => {
-	response.send('Hello world!');
-  });
+app.get("/", (request, response) => {
+	response.send("Hello world!");
+});
 
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 });
-
 
 // React routes for later
 // app.use(express.static("./front-end/build"));

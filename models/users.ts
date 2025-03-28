@@ -2,12 +2,12 @@ import mongoose, { Error } from "mongoose";
 import bcrypt from "bcrypt";
 
 export interface User extends mongoose.Document {
-	username: string,
-	email: string,
-	password: string,
-	frequency: Number,
-	seed: Number,
-	createdAt: Date,
+	username: string;
+	email: string;
+	password: string;
+	frequency: number;
+	seed: number;
+	createdAt: Date;
 }
 
 const UsersSchema = new mongoose.Schema<User>({
@@ -39,13 +39,11 @@ const UsersSchema = new mongoose.Schema<User>({
 	},
 });
 
-
 UsersSchema.pre("save", async function (next) {
 	try {
 		// Check if the password has been modified
 		if (!this.isModified("password")) return next();
 
-		// Generate a salt and hash the password
 		const salt = await bcrypt.genSalt(10);
 		this.password = await bcrypt.hash(this.password, salt);
 
