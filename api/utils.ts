@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from "express";
 
 export function Alea(seed: string): () => number {
 	function Mash() {
@@ -30,6 +30,6 @@ export function Alea(seed: string): () => number {
 }
 
 export const handleError = (res: Response, error: Error, s: number) => {
-    console.error(error);
-    res.status(s).json({ error: error.message });
+	console.error(error);
+	res.status(s).json({ error: error.message });
 };

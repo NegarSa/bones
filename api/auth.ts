@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { Request, Response } from "express";
+import { Request } from "express";
 import { User } from "../models/users";
 
 interface userJWT extends JwtPayload {
