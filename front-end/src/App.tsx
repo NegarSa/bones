@@ -1,29 +1,64 @@
-import { useState } from "react";
+import { Route, Routes } from "react-router";
 import "./App.css";
+import Protected from "./components/Protected";
+import TaskList from "./components/taskList";
+import Header from "./components/navBar";
+import Footer from "./components/footer";
+import Login from "./components/login";
+import DayType from "./components/sideBar";
+import TaskPage from "./components/taskPage";
+import NewTask from "./components/newTask";
+import SignUp from "./components/signup";
+import Dashboard from "./components/dashboard";
 
 function App() {
-	const [count, setCount] = useState(0);
-
 	return (
-		<>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<button
-					type="button"
-					onClick={() => {
-						setCount((count) => count + 1);
-					}}
-				>
-					count is {count}
-				</button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-				</p>
+		<div className="Main">
+			<Header />
+			<div className="body row scroll-y">
+				<div className="App">
+					<div className="left-col"></div>
+					<DayType />
+					<div className="right-col">
+						<Routes>
+							<Route element={<Protected />}>
+								<Route
+									path="/dashboard"
+									element={<Dashboard />}
+								/>
+							</Route>
+							<Route element={<Protected />}>
+								<Route
+									path="/"
+									element={<TaskList />}
+								/>
+							</Route>
+							<Route element={<Protected />}>
+								<Route
+									path="/task/new"
+									element={<NewTask />}
+								/>
+							</Route>
+							<Route element={<Protected />}>
+								<Route
+									path="/task/:id"
+									element={<TaskPage />}
+								/>
+							</Route>
+							<Route
+								path="/login"
+								element={<Login />}
+							/>
+							<Route
+								path="/signup"
+								element={<SignUp />}
+							/>
+						</Routes>
+					</div>
+				</div>
 			</div>
-			<p className="read-the-docs">
-				Click on the Vite and React logos to learn more
-			</p>
-		</>
+			<Footer />
+		</div>
 	);
 }
 
