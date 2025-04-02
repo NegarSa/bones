@@ -1,24 +1,26 @@
 import { Route, Routes } from "react-router";
-import "./App.css";
+
 import Protected from "./components/Protected";
-import TaskList from "./components/taskList";
-import Header from "./components/navBar";
-import Footer from "./components/footer";
-import Login from "./components/login";
-import DayType from "./components/sideBar";
-import TaskPage from "./components/taskPage";
-import NewTask from "./components/newTask";
-import SignUp from "./components/signup";
-import Dashboard from "./components/dashboard";
+import TaskList from "./pages/TaskList";
+import Dashboard from "./pages/Dashboard";
+import SignUp from "./pages/Signup";
+import NewTask from "./pages/NewTask";
+import Login from "./pages/Login";
+import TaskPage from "./pages/TaskPage";
+import SideBar from "./components/SideBar";
+import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
+
+import "./styles/App.css";
 
 function App() {
 	return (
 		<div className="Main">
-			<Header />
+			<NavBar />
 			<div className="body row scroll-y">
 				<div className="App">
 					<div className="left-col"></div>
-					<DayType />
+					<SideBar />
 					<div className="right-col">
 						<Routes>
 							<Route element={<Protected />}>
