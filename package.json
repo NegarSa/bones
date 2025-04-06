@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node index.js",
-    "dev": "nodemon index.ts"
+    "dev": "concurrently \"nodemon index.ts\" \"cd front-end && npm run dev\" "
   },
   "keywords": [],
   "author": "negar",
@@ -32,7 +32,6 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.12.1",
-    "react-router": "^7.4.1"
+    "mongoose": "^8.12.1"
   }
 }

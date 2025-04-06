@@ -5,5 +5,6 @@ export function useUserQuery() {
 	return useQuery({
 		queryKey: ["getUser"],
 		queryFn: userCheck,
+		staleTime: 2,
 	});
 }

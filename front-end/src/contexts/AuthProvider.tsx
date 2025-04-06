@@ -1,28 +1,24 @@
-import { useState, ReactNode } from "react";
-import User from "../utils/userInterface";
-import { useQuery } from "@tanstack/react-query";
+import { ReactNode } from "react";
 import { handleError } from "../utils/request";
-import { userCheck } from "../utils/apiEndpoints";
 import { AuthContext } from "./authContext";
+import { useUserQuery } from "../hooks/useUserQuery";
+import Login from "../pages/Login";
+import Loading from "../components/Loading";
 
-interface props {
-	children: ReactNode;
-}
-export function AuthProvider({ children }: props) {
-	const [user, setUser] = useState<User | null>(null);
-	const [trig, setTrig] = useState<boolean>(false);
-
-	const userQuery = useQuery({
-		queryKey: ["getUser", trig],
-		queryFn: userCheck,
-	});
-	if (userQuery.isError) {
-		handleError(userQuery.error);
-		setUser(null);
+export function AuthProvider({ children }: { children: ReactNode }) {
+	const currentUserQuery = useUserQuery();
+	if (currentUserQuery.isPending) {
+		return <Loading></Loading>;
 	}
-	if (userQuery.isSuccess) {
-		setUser(userQuery.data.data as User);
+	if (currentUserQuery.isError) {
+		handleError(currentUserQuery.error);
+		return (
+			<>
+				error?
+				<Login></Login>
+			</>
+		);
 	}
 
-	return <AuthContext value={{ user, setTrig }}>{children}</AuthContext>;
+	return <AuthContext value={currentUserQuery.data}>{children}</AuthContext>;
 }

@@ -15,9 +15,10 @@ interface userJWT extends JwtPayload {
 }
 
 export default function authenticate(req: Request): User | null {
-	if (!req.signedCookies["token"]) return null;
-	if (jwt.decode(req.signedCookies["token"])) {
-		const upayload = jwt.decode(req.signedCookies["token"]) as userJWT;
+	console.log(req.cookies);
+	if (!req.signedCookies["jwt"]) return null;
+	if (jwt.decode(req.signedCookies["jwt"])) {
+		const upayload = jwt.decode(req.signedCookies["jwt"]) as userJWT;
 		return upayload.user as User;
 	} else {
 		return null;

@@ -9,19 +9,18 @@ import Login from "./pages/Login";
 import TaskPage from "./pages/TaskPage";
 import SideBar from "./components/SideBar";
 import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";
+import { SidebarInset } from "@/components/ui/sidebar";
 
-import "./styles/App.css";
+//import "./styles/App.css";
 
 function App() {
 	return (
-		<div className="Main">
-			<NavBar />
-			<div className="body row scroll-y">
-				<div className="App">
-					<div className="left-col"></div>
-					<SideBar />
-					<div className="right-col">
+		<>
+			<SideBar />
+			<SidebarInset>
+				<div className="Main">
+					<NavBar />
+					<div className="App">
 						<Routes>
 							<Route element={<Protected />}>
 								<Route
@@ -58,9 +57,10 @@ function App() {
 						</Routes>
 					</div>
 				</div>
-			</div>
-			<Footer />
-		</div>
+
+				{/* <Footer /> */}
+			</SidebarInset>
+		</>
 	);
 }
 

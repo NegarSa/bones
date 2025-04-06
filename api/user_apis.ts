@@ -69,7 +69,7 @@ export async function login(req: Request, res: Response): Promise<void> {
 				return;
 			}
 
-			res.cookie("token", token, {
+			res.cookie("jwt", token, {
 				httpOnly: true,
 				//sameSite: "Strict",
 				//secure: true,
