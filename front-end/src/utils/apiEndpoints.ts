@@ -13,8 +13,13 @@ export async function taskGetAllToday() {
 export async function taskNew() {
 	return await request("/api/tasks/new", "POST", true);
 }
-export async function taskEdit(id: string) {
-	return await request(`/api/tasks/${id}`, "PUT", true);
+export async function taskEdit(
+	id: string,
+	data: { status: boolean }
+): Promise<Task> {
+	return await request(`/api/tasks/${id}`, "PUT", true, data).then(
+		(response) => response.data as Task
+	);
 }
 export async function taskRemove(id: string) {
 	return await request(`/api/tasks/${id}`, "DELETE", true);

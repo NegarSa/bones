@@ -22,7 +22,11 @@ export default function SideBar() {
 				/>
 				<span>Bones?</span>
 			</SidebarHeader>
-			<SidebarContent>hi for now</SidebarContent>
+
+			<SidebarContent>
+				<SidebarGroup>hi for now</SidebarGroup>
+			</SidebarContent>
+
 			<SidebarFooter className="sidebar-footer">
 				{auth?.email ? auth.email : "hi please log in"}
 			</SidebarFooter>

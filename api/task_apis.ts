@@ -71,7 +71,7 @@ export async function edit_task(req: Request, res: Response): Promise<void> {
 	if (user === null) {
 		return handleError(res, Error("not logged in"), 401);
 	}
-	if (req.body === null || id !== user._id) {
+	if (req.body === null) {
 		return handleError(res, Error("parameters are not complete"), 400);
 	}
 	try {

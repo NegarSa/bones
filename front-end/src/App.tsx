@@ -17,7 +17,7 @@ function App() {
 	return (
 		<>
 			<SideBar />
-			<SidebarInset>
+			<SidebarInset className="main-side">
 				<div className="Main">
 					<NavBar />
 					<div className="App">
