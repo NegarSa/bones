@@ -27,8 +27,3 @@ export default function TaskList() {
 		</div>
 	);
 }
-{
-	/* <TableCell>
-									<TaskBox {...task} />
-								</TableCell> */
-}

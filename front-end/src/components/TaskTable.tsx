@@ -16,6 +16,7 @@ import {
 	VisibilityState,
 	ColumnFiltersState,
 	getFilteredRowModel,
+	RowPinningState,
 } from "@tanstack/react-table";
 import { useState } from "react";
 import {
@@ -24,8 +25,11 @@ import {
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CalendarPlus } from "lucide-react";
+import NewEditTask from "./NewEditTask";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -41,6 +45,10 @@ export function DataTable<TData, TValue>({
 		{}
 	);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+	const [rowPinning, setRowPinning] = useState<RowPinningState>({
+		top: [],
+		bottom: [],
+	});
 	const table = useReactTable({
 		data,
 		columns,
@@ -50,60 +58,74 @@ export function DataTable<TData, TValue>({
 		onColumnVisibilityChange: setColumnVisibility,
 		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
+		onRowPinningChange: setRowPinning,
 		state: {
 			sorting,
 			columnVisibility,
 			columnFilters,
+			rowPinning,
 		},
 	});
 
 	return (
-		<div className="table-wrapper rounded-md">
+		<div className="table-wrapper">
 			<div className="flex items-center py-4">
 				<Input
 					placeholder="Filter tasks..."
 					value={
-						(table
-							.getColumn("action")
-							?.getFilterValue() as string) ?? ""
+						(table.getColumn("task")?.getFilterValue() as string) ??
+						""
 					}
 					onChange={(event) =>
 						table
-							.getColumn("action")
+							.getColumn("task")
 							?.setFilterValue(event.target.value)
 					}
 					className="max-w-sm"
 				/>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button
+							variant="outline"
+							className="ml-auto"
+						>
+							Columns
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="start">
+						{table
+							.getAllColumns()
+							.filter((column) => column.getCanHide())
+							.map((column) => {
+								return (
+									<DropdownMenuCheckboxItem
+										key={column.id}
+										className="capitalize"
+										checked={column.getIsVisible()}
+										onCheckedChange={(value) => {
+											column.toggleVisibility(!!value);
+										}}
+									>
+										{column.id}
+									</DropdownMenuCheckboxItem>
+								);
+							})}
+					</DropdownMenuContent>
+				</DropdownMenu>
+
+				<Dialog>
+					<DialogTrigger asChild>
+						<Button
+							variant="outline"
+							size="icon"
+						>
+							<CalendarPlus />
+						</Button>
+					</DialogTrigger>
+					<NewEditTask varient="new" />
+				</Dialog>
 			</div>
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button
-						variant="outline"
-						className="ml-auto"
-					>
-						Columns
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent align="start">
-					{table
-						.getAllColumns()
-						.filter((column) => column.getCanHide())
-						.map((column) => {
-							return (
-								<DropdownMenuCheckboxItem
-									key={column.id}
-									className="capitalize"
-									checked={column.getIsVisible()}
-									onCheckedChange={(value) => {
-										column.toggleVisibility(!!value);
-									}}
-								>
-									{column.id}
-								</DropdownMenuCheckboxItem>
-							);
-						})}
-				</DropdownMenuContent>
-			</DropdownMenu>
+
 			<Table>
 				<TableHeader>
 					{table.getHeaderGroups().map((headerGroup) => (

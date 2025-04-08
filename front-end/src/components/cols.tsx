@@ -15,17 +15,19 @@ import {
 
 export const columns: ColumnDef<Task>[] = [
 	{
-		accessorKey: "action",
+		accessorKey: "task",
+		enableHiding: false,
 		header: ({ column }) => {
 			return (
 				<Button
+					className="-ml-3"
 					variant="ghost"
 					onClick={() => {
 						column.toggleSorting(column.getIsSorted() === "asc");
 					}}
 				>
 					Task
-					<ArrowUpDown className="ml-2 h-4 w-4" />
+					<ArrowUpDown className="-mr-5 h-4 w-4" />
 				</Button>
 			);
 		},
@@ -35,22 +37,27 @@ export const columns: ColumnDef<Task>[] = [
 	},
 	{
 		accessorKey: "type_of_day",
+		size: 15,
 		header: ({ column }) => {
 			return (
 				<Button
+					className="-ml-3"
 					variant="ghost"
 					onClick={() => {
 						column.toggleSorting(column.getIsSorted() === "asc");
 					}}
 				>
 					Type of Day
-					<ArrowUpDown className="ml-2 h-4 w-4" />
+					<ArrowUpDown />
 				</Button>
 			);
 		},
 	},
 	{
 		id: "actions",
+		enableHiding: false,
+		size: 5,
+		maxSize: 5,
 		cell: ({ row }) => {
 			const task = row.original;
 

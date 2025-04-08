@@ -1,6 +1,13 @@
 .table-wrapper{
-    margin: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 .table-head{
     font-weight: 600;
+}
+.tasklist-page{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }

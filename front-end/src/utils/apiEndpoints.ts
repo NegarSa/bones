@@ -10,13 +10,20 @@ export async function taskGetAll(): Promise<[Task]> {
 export async function taskGetAllToday() {
 	return await request("/api/tasks/gettype", "GET", true);
 }
-export async function taskNew() {
-	return await request("/api/tasks/new", "POST", true);
+export async function taskNew(task: Task): Promise<Task> {
+	return await request("/api/tasks/new", "POST", true, task).then(
+		(response) => response.data as Task
+	);
 }
 export async function taskEdit(
 	id: string,
 	data: { status: boolean }
 ): Promise<Task> {
+	return await request(`/api/tasks/${id}`, "PUT", true, data).then(
+		(response) => response.data as Task
+	);
+}
+export async function taskEditAll(id: string, data: Task): Promise<Task> {
 	return await request(`/api/tasks/${id}`, "PUT", true, data).then(
 		(response) => response.data as Task
 	);
