@@ -3,7 +3,8 @@ import Task from "../utils/taskInterface";
 import TaskBox from "./Task";
 import { ArrowUpDown } from "lucide-react";
 import { MoreHorizontal } from "lucide-react";
-
+import { taskRemove } from "@/utils/apiEndpoints";
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -12,6 +13,13 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+async function onClick(id: string) {
+	const res = await taskRemove(id);
+	if (res.status !== 200) {
+		alert("nope?");
+	}
+}
 
 export const columns: ColumnDef<Task>[] = [
 	{
@@ -27,7 +35,7 @@ export const columns: ColumnDef<Task>[] = [
 					}}
 				>
 					Task
-					<ArrowUpDown className="-mr-5 h-4 w-4" />
+					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
 		},
@@ -77,7 +85,9 @@ export const columns: ColumnDef<Task>[] = [
 							Delete task {task.action}
 						</DropdownMenuItem>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>View details</DropdownMenuItem>
+						<Link to={"/task/" + task._id}>
+							<DropdownMenuItem>View details</DropdownMenuItem>
+						</Link>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			);

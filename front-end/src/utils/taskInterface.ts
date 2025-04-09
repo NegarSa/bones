@@ -5,6 +5,6 @@ export default interface Task {
 	createdAt: Date;
 	deadline?: Date;
 	status: boolean;
-	type_of_day: string;
+	type_of_day: "bones" | "no bones" | "both";
 	subtasks: [Task];
 }

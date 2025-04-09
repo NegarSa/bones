@@ -25,11 +25,18 @@ import {
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CalendarPlus } from "lucide-react";
 import NewEditTask from "./NewEditTask";
+import { Link } from "react-router";
+import TaskBox from "./Task";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -40,6 +47,7 @@ export function DataTable<TData, TValue>({
 	columns,
 	data,
 }: DataTableProps<TData, TValue>) {
+	const [dialogOpen, setDialogOpen] = useState(false);
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
 		{}
@@ -112,8 +120,18 @@ export function DataTable<TData, TValue>({
 							})}
 					</DropdownMenuContent>
 				</DropdownMenu>
-
-				<Dialog>
+				<Link to="/newtask">
+					<Button
+						variant="outline"
+						size="icon"
+					>
+						<CalendarPlus />
+					</Button>
+				</Link>
+				{/* <Dialog
+					open={dialogOpen}
+					onOpenChange={setDialogOpen}
+				>
 					<DialogTrigger asChild>
 						<Button
 							variant="outline"
@@ -122,8 +140,11 @@ export function DataTable<TData, TValue>({
 							<CalendarPlus />
 						</Button>
 					</DialogTrigger>
-					<NewEditTask varient="new" />
-				</Dialog>
+					<NewEditTask
+						dialogClose={setDialogOpen}
+						variant={true}
+					/>
+				</Dialog> */}
 			</div>
 
 			<Table>
@@ -149,16 +170,38 @@ export function DataTable<TData, TValue>({
 				<TableBody>
 					{table.getRowModel().rows.length ? (
 						table.getRowModel().rows.map((row) => (
-							<TableRow key={row.id}>
-								{row.getVisibleCells().map((cell) => (
-									<TableCell key={cell.id}>
-										{flexRender(
-											cell.column.columnDef.cell,
-											cell.getContext()
+							<Collapsible
+								key={row.id + "c"}
+								asChild
+							>
+								<>
+									<CollapsibleTrigger asChild>
+										<TableRow key={row.id}>
+											{row
+												.getVisibleCells()
+												.map((cell) => (
+													<TableCell key={cell.id}>
+														{flexRender(
+															cell.column
+																.columnDef.cell,
+															cell.getContext()
+														)}
+													</TableCell>
+												))}
+										</TableRow>
+									</CollapsibleTrigger>
+									<CollapsibleContent asChild>
+										{row.original.subtasks.map(
+											(subtask) => (
+												<TaskBox
+													key={subtask._id}
+													task={subtask}
+												/>
+											)
 										)}
-									</TableCell>
-								))}
-							</TableRow>
+									</CollapsibleContent>
+								</>
+							</Collapsible>
 						))
 					) : (
 						<TableRow>

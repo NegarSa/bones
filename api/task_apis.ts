@@ -45,6 +45,7 @@ export async function get_all_tasks_for_user_type_of_day(
 }
 
 export async function new_task(req: Request, res: Response): Promise<void> {
+	console.log("it's here");
 	const user = authenticate(req);
 	if (user === null) {
 		return handleError(res, Error("not logged in"), 401);
@@ -60,6 +61,33 @@ export async function new_task(req: Request, res: Response): Promise<void> {
 		const data = Tasks.create({ ...req.body, user: user._id });
 		res.json(data);
 		return;
+	} catch {
+		(error: Error) => handleError(res, error, 500);
+	}
+}
+
+export async function get_task_id(req: Request, res: Response): Promise<void> {
+	const { id } = req.params;
+	const user = authenticate(req);
+	if (user === null) {
+		return handleError(res, Error("not logged in"), 401);
+	}
+	try {
+		const task = await Tasks.findById(id);
+		if (task === null) {
+			return handleError(res, Error("task not found"), 404);
+		}
+		if (task.user.toString() === user._id) {
+			const event = await Tasks.findById(id);
+			res.json(event).send();
+			return;
+		} else {
+			return handleError(
+				res,
+				Error("you don't have access to this task"),
+				401
+			);
+		}
 	} catch {
 		(error: Error) => handleError(res, error, 500);
 	}

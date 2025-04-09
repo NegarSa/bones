@@ -1,3 +1,9 @@
-export default function NewTask() {
-	return <div>hi</div>;
+import TaskForm from "@/components/TaskForm";
+export default function NewTask({ setDialogOpen }) {
+	return (
+		<TaskForm
+			variant={true}
+			dialogClose={setDialogOpen}
+		/>
+	);
 }

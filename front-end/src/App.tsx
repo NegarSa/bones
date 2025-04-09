@@ -36,7 +36,7 @@ function App() {
 							</Route>
 							<Route element={<Protected />}>
 								<Route
-									path="/task/new"
+									path="/newtask"
 									element={<NewTask />}
 								/>
 							</Route>
