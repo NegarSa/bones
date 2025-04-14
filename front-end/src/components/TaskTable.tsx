@@ -17,27 +17,23 @@ import {
 	ColumnFiltersState,
 	getFilteredRowModel,
 	RowPinningState,
+	getExpandedRowModel,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CalendarPlus } from "lucide-react";
 import NewEditTask from "./NewEditTask";
+import Task from "../utils/taskInterface";
 import { Link } from "react-router";
-import TaskBox from "./Task";
-
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
@@ -57,6 +53,8 @@ export function DataTable<TData, TValue>({
 		top: [],
 		bottom: [],
 	});
+	const [expanded, setExpanded] = useState({});
+
 	const table = useReactTable({
 		data,
 		columns,
@@ -67,11 +65,14 @@ export function DataTable<TData, TValue>({
 		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
 		onRowPinningChange: setRowPinning,
+		getExpandedRowModel: getExpandedRowModel(),
+		onExpandedChange: setExpanded,
 		state: {
 			sorting,
 			columnVisibility,
 			columnFilters,
 			rowPinning,
+			expanded,
 		},
 	});
 
@@ -81,12 +82,13 @@ export function DataTable<TData, TValue>({
 				<Input
 					placeholder="Filter tasks..."
 					value={
-						(table.getColumn("task")?.getFilterValue() as string) ??
-						""
+						(table
+							.getColumn("action")
+							?.getFilterValue() as string) ?? ""
 					}
 					onChange={(event) =>
 						table
-							.getColumn("task")
+							.getColumn("action")
 							?.setFilterValue(event.target.value)
 					}
 					className="max-w-sm"
@@ -125,10 +127,10 @@ export function DataTable<TData, TValue>({
 						variant="outline"
 						size="icon"
 					>
-						<CalendarPlus />
+						<CalendarPlus color="red" />
 					</Button>
 				</Link>
-				{/* <Dialog
+				<Dialog
 					open={dialogOpen}
 					onOpenChange={setDialogOpen}
 				>
@@ -144,7 +146,7 @@ export function DataTable<TData, TValue>({
 						dialogClose={setDialogOpen}
 						variant={true}
 					/>
-				</Dialog> */}
+				</Dialog>
 			</div>
 
 			<Table>
@@ -170,38 +172,49 @@ export function DataTable<TData, TValue>({
 				<TableBody>
 					{table.getRowModel().rows.length ? (
 						table.getRowModel().rows.map((row) => (
-							<Collapsible
-								key={row.id + "c"}
-								asChild
-							>
-								<>
-									<CollapsibleTrigger asChild>
-										<TableRow key={row.id}>
-											{row
-												.getVisibleCells()
-												.map((cell) => (
-													<TableCell key={cell.id}>
-														{flexRender(
-															cell.column
-																.columnDef.cell,
-															cell.getContext()
-														)}
-													</TableCell>
-												))}
-										</TableRow>
-									</CollapsibleTrigger>
-									<CollapsibleContent asChild>
-										{row.original.subtasks.map(
-											(subtask) => (
-												<TaskBox
-													key={subtask._id}
-													task={subtask}
-												/>
-											)
-										)}
-									</CollapsibleContent>
-								</>
-							</Collapsible>
+							<Fragment key={row.id}>
+								<TableRow>
+									{row.getVisibleCells().map((cell) => (
+										<TableCell key={cell.id}>
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext()
+											)}
+										</TableCell>
+									))}
+								</TableRow>
+
+								{row.getIsExpanded() &&
+								row.original.subtasks.length > 0 ? (
+									<TableRow
+										key={row.id.toString() + "subtask"}
+									>
+										<TableCell colSpan={columns.length + 1}>
+											<div className="pl-20 border-l-2 border-gray-300">
+												<ul className="list-disc">
+													{row.original.subtasks.map(
+														(
+															subtask: string,
+															index: number
+														) => (
+															<li
+																key={
+																	index.toString() +
+																	row.id.toString() +
+																	"subtask"
+																}
+																className="py-1"
+															>
+																{subtask}
+															</li>
+														)
+													)}
+												</ul>
+											</div>
+										</TableCell>
+									</TableRow>
+								) : null}
+							</Fragment>
 						))
 					) : (
 						<TableRow>

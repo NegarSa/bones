@@ -141,6 +141,7 @@ export async function delete_task(req: Request, res: Response): Promise<void> {
 		}
 		if (task.user.toString() === user._id) {
 			await Tasks.findByIdAndDelete(id);
+			res.status(200).send("task deleted").send();
 			return;
 		} else {
 			return handleError(

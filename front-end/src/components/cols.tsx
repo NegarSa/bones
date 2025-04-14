@@ -3,7 +3,6 @@ import Task from "../utils/taskInterface";
 import TaskBox from "./Task";
 import { ArrowUpDown } from "lucide-react";
 import { MoreHorizontal } from "lucide-react";
-import { taskRemove } from "@/utils/apiEndpoints";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,16 +13,30 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-async function onClick(id: string) {
-	const res = await taskRemove(id);
-	if (res.status !== 200) {
-		alert("nope?");
-	}
-}
-
+import { ChevronDown, ChevronRight } from "lucide-react";
+import TaskActions from "./TaskActions";
 export const columns: ColumnDef<Task>[] = [
 	{
-		accessorKey: "task",
+		id: "expander",
+		enableHiding: false,
+		header: "",
+		cell: ({ row }) => (
+			<Button
+				variant="ghost"
+				size="icon"
+				onClick={() => row.toggleExpanded()}
+				// disabled={row.original.subtasks.length === 0}
+			>
+				{row.getIsExpanded() ? (
+					<ChevronDown size={16} />
+				) : (
+					<ChevronRight size={16} />
+				)}
+			</Button>
+		),
+	},
+	{
+		accessorKey: "action",
 		enableHiding: false,
 		header: ({ column }) => {
 			return (
@@ -64,25 +77,23 @@ export const columns: ColumnDef<Task>[] = [
 	{
 		id: "actions",
 		enableHiding: false,
-		size: 5,
-		maxSize: 5,
 		cell: ({ row }) => {
 			const task = row.original;
 
 			return (
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<Button
-							variant="ghost"
-							className="h-8 w-8 p-0"
-						>
+						<Button variant="ghost">
 							<span className="sr-only">Open menu</span>
-							<MoreHorizontal className="h-4 w-4" />
+							<MoreHorizontal />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
 						<DropdownMenuItem>
-							Delete task {task.action}
+							<TaskActions
+								taskId={task._id}
+								action="delete"
+							/>
 						</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<Link to={"/task/" + task._id}>

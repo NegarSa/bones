@@ -12,11 +12,11 @@ export default function TaskPage() {
 	if (taskQuery.isError) return <>hi sorry something went wrong</>;
 	if (taskQuery.isPending) return <>hi sorry wait</>;
 	return (
-		<>
+		<div className="flex flex-col gap-4 w-1/2">
 			<TaskForm
 				variant={false}
 				task={taskQuery.data}
 			/>
-		</>
+		</div>
 	);
 }

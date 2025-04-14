@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
 
 export interface Task extends mongoose.Document {
-	action: string,
-	description: string,
-	status: boolean,
-	progress: Number,
-	type_of_day: "bones"|"no bones"|"both",
-	deadline: Date,
-	date_created: Date,
-	user: mongoose.Schema.Types.ObjectId,
-	subtasks: [mongoose.Schema.Types.ObjectId],
+	action: string;
+	description: string;
+	status: boolean;
+	progress: Number;
+	type_of_day: "bones" | "no bones" | "both";
+	deadline: Date;
+	date_created: Date;
+	user: mongoose.Schema.Types.ObjectId;
+	subtasks: [string];
 }
 
 const TasksSchema = new mongoose.Schema<Task>({
@@ -29,20 +29,19 @@ const TasksSchema = new mongoose.Schema<Task>({
 		default: false,
 		required: [true, "Every task has a status."],
 	},
-    progress:{
-        type: Number,
-        min: 0,
+	progress: {
+		type: Number,
+		min: 0,
 		max: 100,
-    },
+	},
 	type_of_day: {
 		type: String,
 		lowercase: true,
 		enum: ["bones", "no-bones", "both"],
 	},
-    subtasks:{
-        type:[mongoose.Schema.Types.ObjectId],
-        ref: "Tasks",
-    },
+	subtasks: {
+		type: [String],
+	},
 	deadline: {
 		type: Date,
 	},

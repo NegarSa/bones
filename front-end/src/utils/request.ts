@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
 	baseURL: "http://127.0.0.1:8181",
-	timeout: 5000,
+	//timeout: 5000,
 });
 
 export async function request(
@@ -11,13 +11,18 @@ export async function request(
 	creds: boolean,
 	data?: object
 ) {
-	return await axiosInstance({
-		url: url,
-		method: method,
-		withCredentials: creds,
-		signal: AbortSignal.timeout(5000),
-		data: data,
-	});
+	try {
+		return await axiosInstance({
+			url: url,
+			method: method,
+			withCredentials: creds,
+			//signal: AbortSignal.timeout(5000),
+			data: data,
+		});
+	} catch (error) {
+		handleError(error);
+		throw error; // Re-throw the error after handling it
+	}
 }
 
 export function handleError(error: unknown): void {

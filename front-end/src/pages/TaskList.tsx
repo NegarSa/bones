@@ -3,7 +3,7 @@ import { DataTable } from "@/components/TaskTable";
 import { useQuery } from "@tanstack/react-query";
 import { taskGetAll } from "../utils/apiEndpoints";
 import { columns } from "../components/cols";
-
+import Task from "../utils/taskInterface";
 import "../styles/table.css";
 export default function TaskList() {
 	const tasksQuery = useQuery({
@@ -20,7 +20,7 @@ export default function TaskList() {
 		<div className="tasklist-page">
 			<div className="table-wrapper">
 				<DataTable
-					data={tasksQuery.data}
+					data={tasksQuery.data as Task[]}
 					columns={columns}
 				/>
 			</div>

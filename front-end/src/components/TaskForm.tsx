@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useForm, useFieldArray } from "react-hook-form";
 import {
 	Form,
@@ -6,6 +7,7 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
+import { Separator } from "@/components/ui/separator";
 import Task from "../utils/taskInterface";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +21,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Plus, Minus } from "lucide-react";
 import {
 	Popover,
 	PopoverContent,
@@ -26,6 +29,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import TaskActions from "./TaskActions";
 const taskSchema = z.object({
 	action: z.string().min(1, "Task action is required"),
 	type_of_day: z.string(),
@@ -36,19 +40,17 @@ const taskSchema = z.object({
 		// 	message: "Invalid date format",
 		// })
 		.nullable(),
-	// subtasks: z.array(
-	// 	z.object({
-	// 		subtaskName: z.string().min(1, "Task action is required"),
-	// 	})
-	// ),
+	subtasks: z.array(
+		z.object({
+			action: z.string().min(1, "Task action is required"),
+		})
+	),
 });
 interface propsType {
 	variant: boolean;
 	task?: Task;
-	dialogClose?: Function;
+	dialogClose?: (value: boolean) => void;
 }
-import { taskRemove } from "../utils/apiEndpoints";
-import { useQuery } from "@tanstack/react-query";
 
 export default function TaskForm(props: propsType) {
 	const { variant, task, dialogClose } = props;
@@ -64,9 +66,13 @@ export default function TaskForm(props: propsType) {
 	const taskMutation = useMutation({
 		mutationFn: (data: { action: string; description: string }) =>
 			taskNew(data as Task),
+		onSuccess: () =>
+			queryClient.invalidateQueries({ queryKey: ["getTasks"] }),
 	});
 	const taskMutationEdit = useMutation({
 		mutationFn: (data: Task) => taskEditAll(task!._id, data),
+		onSuccess: () =>
+			queryClient.invalidateQueries({ queryKey: ["getTasks"] }),
 	});
 
 	const form = useForm<z.infer<typeof taskSchema>>({
@@ -74,74 +80,88 @@ export default function TaskForm(props: propsType) {
 		defaultValues: {
 			action: variant ? "" : task?.action,
 			type_of_day: variant ? "bones" : task?.type_of_day,
-			deadline: variant ? "" : "",
 			description: variant ? "" : task?.description,
-			// subtasks:
-			// 	varient === "new"
-			// 		? []
-			// 		: task?.subtasks.map((subtask) => {
-			// 				return { subtaskName: subtask.action };
-			// 		  }),
+			subtasks: variant
+				? []
+				: task?.subtasks.map((subtask) => {
+						return { action: subtask };
+				  }),
 		},
 	});
-	// const { fields, append, remove } = useFieldArray({
-	// 	control: form.control,
-	// 	name: "subtasks",
-	// });
+	const { fields, append, remove } = useFieldArray({
+		name: "subtasks",
+		control: form.control,
+	});
 
 	async function onSubmit(data: z.infer<typeof taskSchema>) {
 		const finalMutation = variant ? taskMutation : taskMutationEdit;
+		console.log(data);
 		finalMutation.mutate({
 			action: data.action,
 			description: data.description,
 			type_of_day: data.type_of_day,
 			deadline: date,
+			subtasks: data.subtasks.map((subtask) => subtask.action),
 		} as Task);
 		if (finalMutation.isError) {
 			alert(finalMutation.error);
 			return;
 		}
 		if (!finalMutation.isPending) {
-			await queryClient.refetchQueries({
-				queryKey: ["getTasks"],
-			});
 			if (dialogClose) dialogClose(false);
 			else {
 				await nav("/");
 			}
 		}
 	}
-	async function onDelete() {
-		try {
-			const res = await taskRemove(task?._id);
-		} catch {
-		} finally {
-			await nav("/");
-		}
-	}
+
 	return (
-		<>
+		<div className="flex flex-col items-center justify-center float-center object-center">
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className="space-y-8"
+					className="flex flex-col p-10 space-y-3 "
 					id="form-task"
 				>
-					<FormField
-						control={form.control}
-						name="action"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Task</FormLabel>
-								<FormControl>
-									<Input
-										placeholder=""
-										{...field}
-									/>
-								</FormControl>
-							</FormItem>
-						)}
-					/>
+					<div className="flex items-center justify-between">
+						<FormField
+							control={form.control}
+							name="action"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Task</FormLabel>
+									<FormControl>
+										<Input
+											className="mr-4 pr-5 grow"
+											placeholder=""
+											{...field}
+										/>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="type_of_day"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Type of day</FormLabel>
+									<FormControl>
+										<select
+											className="border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+											{...field}
+										>
+											<option value="bones">Bones</option>
+											<option value="no-bones">
+												No bones
+											</option>
+											<option value="both">Both</option>
+										</select>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+					</div>
 					<FormField
 						control={form.control}
 						name="description"
@@ -150,6 +170,7 @@ export default function TaskForm(props: propsType) {
 								<FormLabel>Description</FormLabel>
 								<FormControl>
 									<Textarea
+										className="grow"
 										placeholder=""
 										{...field}
 									/>
@@ -157,24 +178,7 @@ export default function TaskForm(props: propsType) {
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name="type_of_day"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Type of day</FormLabel>
-								<FormControl>
-									<select className="w-[280px]">
-										<option value="bones">Bones</option>
-										<option value="no bones">
-											No bones
-										</option>
-										<option value="both">Both</option>
-									</select>
-								</FormControl>
-							</FormItem>
-						)}
-					/>
+
 					<FormField
 						control={form.control}
 						name="deadline"
@@ -182,12 +186,12 @@ export default function TaskForm(props: propsType) {
 							<FormItem>
 								<FormLabel>Deadline</FormLabel>
 								<FormControl>
-									<Popover>
+									<Popover modal={true}>
 										<PopoverTrigger asChild>
 											<Button
 												variant={"outline"}
 												className={cn(
-													"w-[280px] justify-start text-left font-normal",
+													"bg-transparent justify-start text-left font-normal",
 													!field.value &&
 														"text-muted-foreground"
 												)}
@@ -204,7 +208,6 @@ export default function TaskForm(props: propsType) {
 												mode="single"
 												selected={field.value}
 												onSelect={field.onChange}
-												initialFocus
 											/>
 										</PopoverContent>
 									</Popover>
@@ -212,7 +215,46 @@ export default function TaskForm(props: propsType) {
 							</FormItem>
 						)}
 					/>
+
+					<div className="flex items-center justify-between">
+						<FormLabel>Subtasks:</FormLabel>
+						<Button
+							type="button"
+							size="icon"
+							variant="outline"
+							className="bg-transparent border-none"
+							onClick={() => {
+								append({ action: "" });
+							}}
+						>
+							<Plus />
+						</Button>
+					</div>
+					{fields.map((field, index) => (
+						<div
+							className="ml-10 flex items-center justify-between"
+							key={field.id}
+						>
+							<Input
+								placeholder="Description"
+								// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+								{...form.register(`subtasks.${index}.action`)}
+							/>
+							<Button
+								className="ml-2"
+								type="button"
+								variant="destructive"
+								onClick={() => {
+									remove(index);
+								}}
+							>
+								<Minus />
+							</Button>
+						</div>
+					))}
+
 					<Button
+						className="self-end"
 						type="submit"
 						form="form-task"
 						disabled={taskMutation.isPending || loading}
@@ -224,12 +266,13 @@ export default function TaskForm(props: propsType) {
 					</Button>
 				</form>
 			</Form>
-			<Button
-				variant="destructive"
-				onClick={onDelete}
-			>
-				DELETE TASK
-			</Button>
-		</>
+			{!variant && (
+				<TaskActions
+					className="self-center"
+					taskId={task ? task._id : ""}
+					action={dialogClose ? "delete" : "delete-page"}
+				/>
+			)}
+		</div>
 	);
 }

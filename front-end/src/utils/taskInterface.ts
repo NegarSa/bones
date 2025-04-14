@@ -6,5 +6,5 @@ export default interface Task {
 	deadline?: Date;
 	status: boolean;
 	type_of_day: "bones" | "no bones" | "both";
-	subtasks: [Task];
+	subtasks: string[];
 }
