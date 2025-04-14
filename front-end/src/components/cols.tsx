@@ -58,7 +58,7 @@ export const columns: ColumnDef<Task>[] = [
 	},
 	{
 		accessorKey: "type_of_day",
-		size: 15,
+
 		header: ({ column }) => {
 			return (
 				<Button
@@ -72,6 +72,26 @@ export const columns: ColumnDef<Task>[] = [
 					<ArrowUpDown />
 				</Button>
 			);
+		},
+	},
+	{
+		accessorKey: "deadline",
+		header: ({ column }) => {
+			return (
+				<Button
+					className="-ml-3"
+					variant="ghost"
+					onClick={() => {
+						column.toggleSorting(column.getIsSorted() === "asc");
+					}}
+				>
+					Deadline
+					<ArrowUpDown />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			return <div>{row.original.deadline}</div>;
 		},
 	},
 	{

@@ -64,8 +64,7 @@ export default function TaskForm(props: propsType) {
 	// });
 	const nav = useNavigate();
 	const taskMutation = useMutation({
-		mutationFn: (data: { action: string; description: string }) =>
-			taskNew(data as Task),
+		mutationFn: (data: Task) => taskNew(data),
 		onSuccess: () =>
 			queryClient.invalidateQueries({ queryKey: ["getTasks"] }),
 	});
@@ -100,7 +99,7 @@ export default function TaskForm(props: propsType) {
 			action: data.action,
 			description: data.description,
 			type_of_day: data.type_of_day,
-			deadline: date,
+			deadline: data.deadline,
 			subtasks: data.subtasks.map((subtask) => subtask.action),
 		} as Task);
 		if (finalMutation.isError) {
