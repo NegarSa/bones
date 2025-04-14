@@ -25,7 +25,7 @@ export const columns: ColumnDef<Task>[] = [
 				variant="ghost"
 				size="icon"
 				onClick={() => row.toggleExpanded()}
-				// disabled={row.original.subtasks.length === 0}
+				disabled={row.original.subtasks.length === 0}
 			>
 				{row.getIsExpanded() ? (
 					<ChevronDown size={16} />

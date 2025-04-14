@@ -53,7 +53,9 @@ export async function userCheck(): Promise<User> {
 	);
 }
 export async function userTypeOfDay() {
-	return await request("/api/users/today", "GET", true);
+	return await request("/api/users/today", "GET", true).then((response) => {
+		return response.data.type_of_day as number;
+	});
 }
 export async function userEdit(id: string) {
 	return await request(`/api/users/${id}`, "PUT", true);
