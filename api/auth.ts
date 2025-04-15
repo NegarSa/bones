@@ -15,7 +15,6 @@ interface userJWT extends JwtPayload {
 }
 
 export default function authenticate(req: Request): User | null {
-	console.log(req.cookies);
 	if (!req.signedCookies["jwt"]) return null;
 	if (jwt.decode(req.signedCookies["jwt"])) {
 		const upayload = jwt.decode(req.signedCookies["jwt"]) as userJWT;

@@ -7,7 +7,6 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
 import Task from "../utils/taskInterface";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,12 +33,7 @@ const taskSchema = z.object({
 	action: z.string().min(1, "Task action is required"),
 	type_of_day: z.string(),
 	description: z.string().nullable(),
-	deadline: z
-		.date()
-		// .refine((date) => !isNaN(Date.parse(date)), {
-		// 	message: "Invalid date format",
-		// })
-		.nullable(),
+	deadline: z.date().nullable(),
 	subtasks: z.array(
 		z.object({
 			action: z.string().min(1, "Task action is required"),
@@ -55,13 +49,7 @@ interface propsType {
 export default function TaskForm(props: propsType) {
 	const { variant, task, dialogClose } = props;
 	const [loading, setLoading] = useState(false);
-	const [date, setDate] = useState<Date>();
 	const queryClient = useQueryClient();
-	// const deleteQuery = useQuery({
-	// 	queryKey: ["deleteTask", task ? task._id : ""],
-	// 	queryFn: () => taskRemove(task ? task._id : ""),
-	// 	enabled: false,
-	// });
 	const nav = useNavigate();
 	const taskMutation = useMutation({
 		mutationFn: (data: Task) => taskNew(data),
@@ -80,6 +68,7 @@ export default function TaskForm(props: propsType) {
 			action: variant ? "" : task?.action,
 			type_of_day: variant ? "bones" : task?.type_of_day,
 			description: variant ? "" : task?.description,
+			deadline: variant ? null : task?.deadline,
 			subtasks: variant
 				? []
 				: task?.subtasks.map((subtask) => {

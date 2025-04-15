@@ -12,6 +12,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { format } from "date-fns";
 
 import { ChevronDown, ChevronRight } from "lucide-react";
 import TaskActions from "./TaskActions";
@@ -91,7 +92,13 @@ export const columns: ColumnDef<Task>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			return <div>{row.original.deadline}</div>;
+			return (
+				<div>
+					{row.original.deadline
+						? format(row.original.deadline, "PPP")
+						: "No deadline"}
+				</div>
+			);
 		},
 	},
 	{

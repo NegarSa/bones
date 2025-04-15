@@ -45,7 +45,6 @@ export async function get_all_tasks_for_user_type_of_day(
 }
 
 export async function new_task(req: Request, res: Response): Promise<void> {
-	console.log("it's here");
 	const user = authenticate(req);
 	if (user === null) {
 		return handleError(res, Error("not logged in"), 401);
