@@ -12,7 +12,7 @@ import {
 import BonesLogo from "../assets/favicon-32x32.png";
 import { useAuth } from "@/hooks/useAuth";
 import "../styles/App.css";
-import { Link } from "react-router";
+
 import { Home, LayoutDashboardIcon } from "lucide-react";
 import { useTypeOfDay } from "@/hooks/useTypeOfDay";
 
@@ -35,16 +35,14 @@ export default function SideBar() {
 	const typeQuery = useTypeOfDay();
 	return (
 		<Sidebar variant="inset">
-			<Link to="/">
-				<SidebarHeader className="sidebar-header">
-					<img
-						src={BonesLogo}
-						alt="bones app logo"
-						width="30px"
-					/>
-					<span>Bones?</span>
-				</SidebarHeader>
-			</Link>
+			<SidebarHeader className="sidebar-header">
+				<img
+					src={BonesLogo}
+					alt="bones app logo"
+					width="30px"
+				/>
+				<span>Bones?</span>
+			</SidebarHeader>
 
 			<SidebarContent>
 				<SidebarMenu>
@@ -87,7 +85,7 @@ export default function SideBar() {
 			</SidebarContent>
 
 			<SidebarFooter className="sidebar-footer">
-				{auth?.email ? auth.email : "hi please log in"}
+				{auth?.username ? auth.username : "hi please log in"}
 			</SidebarFooter>
 		</Sidebar>
 	);

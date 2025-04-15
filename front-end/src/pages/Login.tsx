@@ -4,11 +4,9 @@ import { z } from "zod";
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
-	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -42,21 +40,21 @@ export default function Login() {
 	const LoginMutation = useMutation({
 		mutationFn: (data: { email: string; password: string }) =>
 			userLogin(data),
+		onError: () => {
+			alert(LoginMutation.error);
+		},
+		onSuccess: async () => {
+			await userQuery.refetch();
+			await navigate("/");
+		},
 	});
 
-	async function onSubmit(values: z.infer<typeof formSchema>) {
+	function onSubmit(values: z.infer<typeof formSchema>) {
 		if (values.email !== "" && values.password !== "") {
 			LoginMutation.mutate({
 				email: values.email,
 				password: values.password,
 			});
-			if (LoginMutation.isError) {
-				alert(LoginMutation.error);
-				return;
-			} else if (LoginMutation.isSuccess) {
-				await userQuery.refetch();
-				await navigate("/");
-			}
 		}
 	}
 	return (
@@ -80,10 +78,6 @@ export default function Login() {
 										{...field}
 									/>
 								</FormControl>
-								<FormDescription>
-									This is the email you signed up with.
-								</FormDescription>
-								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -95,14 +89,11 @@ export default function Login() {
 								<FormLabel>Password</FormLabel>
 								<FormControl>
 									<Input
+										type="password"
 										placeholder=""
 										{...field}
 									/>
 								</FormControl>
-								<FormDescription>
-									This is your private password.
-								</FormDescription>
-								<FormMessage />
 							</FormItem>
 						)}
 					/>

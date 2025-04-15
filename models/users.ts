@@ -1,4 +1,4 @@
-import mongoose, { Error } from "mongoose";
+import mongoose, { Error, ObjectId } from "mongoose";
 import bcrypt from "bcrypt";
 
 export interface User extends mongoose.Document {
@@ -13,11 +13,11 @@ export interface User extends mongoose.Document {
 const UsersSchema = new mongoose.Schema<User>({
 	username: {
 		type: String,
-		lowercase: true,
 		required: [true, "username is required."],
 	},
 	email: {
 		type: String,
+		lowercase: true,
 	},
 	password: {
 		type: String,

@@ -34,15 +34,16 @@ import { CalendarPlus } from "lucide-react";
 import NewEditTask from "./NewEditTask";
 import Task from "../utils/taskInterface";
 import { Link } from "react-router";
-interface DataTableProps<TData, TValue> {
-	columns: ColumnDef<TData, TValue>[];
-	data: TData[];
+
+interface DataTableProps<Task, TValue> {
+	columns: ColumnDef<Task, TValue>[];
+	data: Task[];
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<Task, TValue>({
 	columns,
 	data,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<Task, TValue>) {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
@@ -55,7 +56,7 @@ export function DataTable<TData, TValue>({
 	});
 	const [expanded, setExpanded] = useState({});
 
-	const table = useReactTable({
+	const table = useReactTable<Task>({
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
@@ -82,6 +83,7 @@ export function DataTable<TData, TValue>({
 				<Input
 					placeholder="Filter tasks..."
 					value={
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 						(table
 							.getColumn("action")
 							?.getFilterValue() as string) ?? ""

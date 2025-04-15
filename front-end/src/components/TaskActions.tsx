@@ -18,11 +18,11 @@ export default function TaskActions({
 	const deleteTaskMutation = useMutation({
 		mutationFn: taskRemove,
 		onSuccess: () => {
-			queryClient.invalidateQueries(["getTasks"]); // Refresh task list
+			return queryClient.invalidateQueries({ queryKey: ["getTasks"] });
 		},
 		onError: (error) => {
 			console.error("Failed to delete task:", error);
-			queryClient.invalidateQueries(["getTasks"]);
+			return queryClient.invalidateQueries({ queryKey: ["getTasks"] });
 		},
 	});
 
@@ -40,9 +40,11 @@ export default function TaskActions({
 			onClick={() => {
 				void handleDelete();
 			}}
-			disabled={deleteTaskMutation.isLoading}
+			disabled={deleteTaskMutation.status === "pending"}
 		>
-			{deleteTaskMutation.isLoading ? "Deleting..." : "Delete Task"}
+			{deleteTaskMutation.status === "pending"
+				? "Deleting..."
+				: "Delete Task"}
 		</Button>
 	);
 }

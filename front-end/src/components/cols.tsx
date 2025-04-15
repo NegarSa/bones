@@ -25,7 +25,9 @@ export const columns: ColumnDef<Task>[] = [
 			<Button
 				variant="ghost"
 				size="icon"
-				onClick={() => row.toggleExpanded()}
+				onClick={() => {
+					row.toggleExpanded();
+				}}
 				disabled={row.original.subtasks.length === 0}
 			>
 				{row.getIsExpanded() ? (
@@ -35,6 +37,27 @@ export const columns: ColumnDef<Task>[] = [
 				)}
 			</Button>
 		),
+	},
+	{
+		id: "subtasks",
+		enableHiding: true,
+		header: ({ column }) => {
+			return (
+				<Button
+					className="-ml-3"
+					variant="ghost"
+					onClick={() => {
+						column.toggleSorting(column.getIsSorted() === "asc");
+					}}
+				>
+					Subtasks
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			return row.original.subtasks.length;
+		},
 	},
 	{
 		accessorKey: "action",
@@ -70,6 +93,24 @@ export const columns: ColumnDef<Task>[] = [
 					}}
 				>
 					Type of Day
+					<ArrowUpDown />
+				</Button>
+			);
+		},
+	},
+	{
+		accessorKey: "description",
+
+		header: ({ column }) => {
+			return (
+				<Button
+					className="-ml-3"
+					variant="ghost"
+					onClick={() => {
+						column.toggleSorting(column.getIsSorted() === "asc");
+					}}
+				>
+					Description
 					<ArrowUpDown />
 				</Button>
 			);

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Users from "../models/users";
+import Users, { User } from "../models/users";
 import authenticate from "./auth";
 import { handleError, Alea } from "./utils";
 import bcrypt from "bcrypt";
@@ -86,7 +86,7 @@ export async function login(req: Request, res: Response): Promise<void> {
 }
 
 export function clearUserCookie(req: Request, res: Response): void {
-	res.clearCookie("token").end();
+	res.clearCookie("jwt").end();
 	return;
 }
 
@@ -130,7 +130,38 @@ export async function editUser(req: Request, res: Response): Promise<void> {
 			res.status(400).json({
 				message: "User not found",
 			});
+			return;
 		}
+		res.clearCookie("jwt");
+		let token;
+		try {
+			token = jwt.sign(
+				{
+					user: {
+						_id: event._id!.toString(),
+						username: event.username,
+						email: event.email,
+						seed: event.seed,
+						frequency: event.frequency,
+					},
+				},
+				process.env.key!,
+				{
+					expiresIn: "1 hour",
+				}
+			);
+		} catch {
+			(error: Error) => handleError(res, error, 500);
+			return;
+		}
+
+		res.cookie("jwt", token, {
+			partitioned: true,
+			httpOnly: true,
+			//sameSite: "Strict",
+			//secure: true,
+			signed: true,
+		});
 		res.json(event).send();
 		return;
 	} catch (error: any) {

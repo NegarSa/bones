@@ -1,4 +1,8 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt, {
+	JwtPayload,
+	JsonWebTokenError,
+	TokenExpiredError,
+} from "jsonwebtoken";
 import { Request } from "express";
 import { User } from "../models/users";
 
@@ -15,11 +19,22 @@ interface userJWT extends JwtPayload {
 }
 
 export default function authenticate(req: Request): User | null {
-	if (!req.signedCookies["jwt"]) return null;
-	if (jwt.decode(req.signedCookies["jwt"])) {
-		const upayload = jwt.decode(req.signedCookies["jwt"]) as userJWT;
+	const token = req.signedCookies["jwt"];
+	if (!token) return null;
+
+	try {
+		const upayload = jwt.verify(token, process.env.key!) as userJWT;
 		return upayload.user as User;
-	} else {
+	} catch (error) {
+		if (error instanceof TokenExpiredError) {
+			console.error("Token has expired");
+		} else if (error instanceof JsonWebTokenError) {
+			console.error("Invalid token:", error.message);
+		} else if (error instanceof Error) {
+			console.error("Unexpected error:", error.message);
+		} else {
+			console.error("Unknown error occurred");
+		}
 		return null;
 	}
 }

@@ -41,8 +41,8 @@ export async function taskRemove(id: string): Promise<Task> {
 export async function userLogin(data: { email: string; password: string }) {
 	return await request("/api/users/login", "POST", true, data);
 }
-export async function userSignup() {
-	return await request("/api/users/new", "POST", true);
+export async function userSignup(data: User) {
+	return await request("/api/users/new", "POST", true, data);
 }
 export async function userSignout() {
 	return await request("/api/users/clear", "GET", true);
@@ -57,8 +57,10 @@ export async function userTypeOfDay() {
 		return response.data.type_of_day as number;
 	});
 }
-export async function userEdit(id: string) {
-	return await request(`/api/users/${id}`, "PUT", true);
+export async function userEdit(id: string, data: User) {
+	return await request(`/api/users/${id}`, "PUT", true, data).then(
+		(response) => response.data as User
+	);
 }
 export async function userRemove(id: string) {
 	return await request(`/api/users/${id}`, "DELETE", true);

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useForm, useFieldArray } from "react-hook-form";
 import {
 	Form,
@@ -17,7 +16,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Plus, Minus } from "lucide-react";
@@ -48,18 +46,38 @@ interface propsType {
 
 export default function TaskForm(props: propsType) {
 	const { variant, task, dialogClose } = props;
-	const [loading, setLoading] = useState(false);
 	const queryClient = useQueryClient();
 	const nav = useNavigate();
 	const taskMutation = useMutation({
 		mutationFn: (data: Task) => taskNew(data),
-		onSuccess: () =>
-			queryClient.invalidateQueries({ queryKey: ["getTasks"] }),
+		onError: () => {
+			alert(taskMutation.error);
+		},
+		onSuccess: async () => {
+			if (dialogClose) dialogClose(false);
+			else {
+				await nav("/");
+			}
+			return queryClient.invalidateQueries({ queryKey: ["getTasks"] });
+		},
 	});
 	const taskMutationEdit = useMutation({
-		mutationFn: (data: Task) => taskEditAll(task!._id, data),
-		onSuccess: () =>
-			queryClient.invalidateQueries({ queryKey: ["getTasks"] }),
+		mutationFn: (data: Task) => {
+			if (!task) {
+				throw new Error("Task is undefined");
+			}
+			return taskEditAll(task._id, data);
+		},
+		onSuccess: async () => {
+			if (dialogClose) dialogClose(false);
+			else {
+				await nav("/");
+			}
+			return queryClient.invalidateQueries({ queryKey: ["getTasks"] });
+		},
+		onError: () => {
+			alert(taskMutationEdit.error);
+		},
 	});
 
 	const form = useForm<z.infer<typeof taskSchema>>({
@@ -81,7 +99,7 @@ export default function TaskForm(props: propsType) {
 		control: form.control,
 	});
 
-	async function onSubmit(data: z.infer<typeof taskSchema>) {
+	function onSubmit(data: z.infer<typeof taskSchema>) {
 		const finalMutation = variant ? taskMutation : taskMutationEdit;
 		console.log(data);
 		finalMutation.mutate({
@@ -91,22 +109,13 @@ export default function TaskForm(props: propsType) {
 			deadline: data.deadline,
 			subtasks: data.subtasks.map((subtask) => subtask.action),
 		} as Task);
-		if (finalMutation.isError) {
-			alert(finalMutation.error);
-			return;
-		}
-		if (!finalMutation.isPending) {
-			if (dialogClose) dialogClose(false);
-			else {
-				await nav("/");
-			}
-		}
 	}
 
 	return (
 		<div className="flex flex-col items-center justify-center float-center object-center">
 			<Form {...form}>
 				<form
+					// eslint-disable-next-line @typescript-eslint/no-misused-promises
 					onSubmit={form.handleSubmit(onSubmit)}
 					className="flex flex-col p-10 space-y-3 "
 					id="form-task"
@@ -158,9 +167,8 @@ export default function TaskForm(props: propsType) {
 								<FormLabel>Description</FormLabel>
 								<FormControl>
 									<Textarea
-										className="grow"
-										placeholder=""
 										{...field}
+										value={field.value ?? ""}
 									/>
 								</FormControl>
 							</FormItem>
@@ -194,7 +202,9 @@ export default function TaskForm(props: propsType) {
 										<PopoverContent className="w-auto p-0">
 											<Calendar
 												mode="single"
-												selected={field.value}
+												selected={
+													field.value ?? undefined
+												}
 												onSelect={field.onChange}
 											/>
 										</PopoverContent>
@@ -245,7 +255,7 @@ export default function TaskForm(props: propsType) {
 						className="self-end"
 						type="submit"
 						form="form-task"
-						disabled={taskMutation.isPending || loading}
+						disabled={taskMutation.isPending}
 					>
 						{taskMutation.isPending && (
 							<Loader2 className="animate-spin" />
