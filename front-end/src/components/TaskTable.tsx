@@ -34,6 +34,7 @@ import { CalendarPlus } from "lucide-react";
 import NewEditTask from "./NewEditTask";
 import Task from "../utils/taskInterface";
 import { Link } from "react-router";
+import SubTaskBox from "./Subtask";
 
 interface DataTableProps<Task, TValue> {
 	columns: ColumnDef<Task, TValue>[];
@@ -192,26 +193,20 @@ export function DataTable<Task, TValue>({
 										key={row.id.toString() + "subtask"}
 									>
 										<TableCell colSpan={columns.length + 1}>
-											<div className="pl-20 border-l-2 border-gray-300">
-												<ul className="list-disc">
-													{row.original.subtasks.map(
-														(
-															subtask: string,
-															index: number
-														) => (
-															<li
-																key={
-																	index.toString() +
-																	row.id.toString() +
-																	"subtask"
-																}
-																className="py-1"
-															>
-																{subtask}
-															</li>
-														)
-													)}
-												</ul>
+											<div className="pl-30">
+												{row.original.subtasks.map(
+													(subtask, index) => (
+														<SubTaskBox
+															key={
+																index.toString() +
+																row.id.toString() +
+																"subtask"
+															}
+															subtask={subtask}
+															task={row.original}
+														/>
+													)
+												)}
 											</div>
 										</TableCell>
 									</TableRow>

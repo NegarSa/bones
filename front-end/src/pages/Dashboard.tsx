@@ -56,7 +56,12 @@ export default function Dashboard() {
 	});
 
 	const UserMutation = useMutation({
-		mutationFn: (data: User) => userEdit(userQuery.data?._id, data),
+		mutationFn: (data: User) => {
+			if (!userQuery.data?._id) {
+				throw new Error("User ID is undefined");
+			}
+			return userEdit(userQuery.data._id, data);
+		},
 		onSuccess: async () => {
 			await navigate("/");
 			return queryClient.invalidateQueries({ queryKey: ["getUser"] });
@@ -70,8 +75,8 @@ export default function Dashboard() {
 	}
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		UserMutation.mutate({
-			email: userQuery.data.email,
-			_id: userQuery.data._id,
+			email: userQuery.data?.email ?? "",
+			_id: userQuery.data?._id ?? "",
 			frequency: values.frequency,
 			username: values.username,
 		});

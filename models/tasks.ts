@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+interface Subtask {
+	action: string;
+	status: boolean;
+}
+
 export interface Task extends mongoose.Document {
 	action: string;
 	description: string;
@@ -9,9 +14,17 @@ export interface Task extends mongoose.Document {
 	deadline: Date;
 	date_created: Date;
 	user: mongoose.Schema.Types.ObjectId;
-	subtasks: [string];
+	subtasks: [Subtask];
+	priority: number;
 }
 
+const SubtaskSchema = new mongoose.Schema({
+	action: String,
+	status: {
+		type: Boolean,
+		default: false,
+	},
+});
 const TasksSchema = new mongoose.Schema<Task>({
 	action: {
 		type: String,
@@ -34,13 +47,17 @@ const TasksSchema = new mongoose.Schema<Task>({
 		min: 0,
 		max: 100,
 	},
+	priority: {
+		type: Number,
+		default: 4,
+	},
 	type_of_day: {
 		type: String,
 		lowercase: true,
 		enum: ["bones", "no-bones", "both"],
 	},
 	subtasks: {
-		type: [String],
+		type: [SubtaskSchema],
 	},
 	deadline: {
 		type: Date,

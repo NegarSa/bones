@@ -57,35 +57,35 @@ export default function SideBar() {
 						</SidebarMenuItem>
 					))}
 				</SidebarMenu>
-				<SidebarGroup>
-					<span className="font-bold ">
-						{!typeQuery.isPending && !typeQuery.isError
-							? "Hi! Today is a " +
-							  types[typeQuery.data] +
-							  " day!"
-							: "wait so we can find the type of day!"}
-					</span>
-					{!typeQuery.isPending &&
-						!typeQuery.isError &&
-						(!typeQuery.data ? (
-							<img
-								className="type img"
-								src="https://i.ibb.co/Q3TZLJZC/finalbones1.png"
-								alt="bones day"
-								loading="lazy"
-							></img>
-						) : (
-							<img
-								className="type img"
-								src="https://i.ibb.co/spMf3RjC/finalnobones1.png"
-								alt="no bones day"
-							></img>
-						))}
-				</SidebarGroup>
+				<SidebarGroup></SidebarGroup>
 			</SidebarContent>
 
-			<SidebarFooter className="sidebar-footer">
-				{auth?.username ? auth.username : "hi please log in"}
+			<SidebarFooter className="flex flex-col border-1 border-blue-500 rounded-sm">
+				<div className="font-bold ">
+					{!typeQuery.isPending && !typeQuery.isError
+						? "Hi " +
+						  auth?.username +
+						  "! Today is a " +
+						  types[typeQuery.data] +
+						  " day!"
+						: "Log in or wait to see the type of day!"}
+				</div>
+				{!typeQuery.isPending &&
+					!typeQuery.isError &&
+					(!typeQuery.data ? (
+						<img
+							className="m-0"
+							src="https://i.ibb.co/Q3TZLJZC/finalbones1.png"
+							alt="bones day"
+							loading="lazy"
+						></img>
+					) : (
+						<img
+							className="m-0"
+							src="https://i.ibb.co/spMf3RjC/finalnobones1.png"
+							alt="no bones day"
+						></img>
+					))}
 			</SidebarFooter>
 		</Sidebar>
 	);

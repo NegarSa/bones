@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import "../styles/forms.css";
 import { Link, useNavigate } from "react-router";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { userLogin } from "@/utils/apiEndpoints";
 import { Loader2 } from "lucide-react";
 import { useUserQuery } from "@/hooks/useUserQuery";
@@ -32,6 +32,7 @@ const formSchema = z.object({
 export default function Login() {
 	const navigate = useNavigate();
 	const userQuery = useUserQuery();
+	const queryClient = useQueryClient();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: { email: "", password: "" },
@@ -45,6 +46,9 @@ export default function Login() {
 		},
 		onSuccess: async () => {
 			await userQuery.refetch();
+			await queryClient.invalidateQueries({
+				queryKey: ["userTypeOfDay"],
+			});
 			await navigate("/");
 		},
 	});
@@ -112,7 +116,7 @@ export default function Login() {
 				variant="ghost"
 				asChild
 			>
-				<Link to="/signup">Don't have an accout? Sign Up!</Link>
+				<Link to="/signup">Don't have an account? Sign Up!</Link>
 			</Button>
 		</div>
 	);

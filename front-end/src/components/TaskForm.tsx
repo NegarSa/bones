@@ -90,7 +90,7 @@ export default function TaskForm(props: propsType) {
 			subtasks: variant
 				? []
 				: task?.subtasks.map((subtask) => {
-						return { action: subtask };
+						return { action: subtask.action };
 				  }),
 		},
 	});
@@ -107,7 +107,7 @@ export default function TaskForm(props: propsType) {
 			description: data.description,
 			type_of_day: data.type_of_day,
 			deadline: data.deadline,
-			subtasks: data.subtasks.map((subtask) => subtask.action),
+			subtasks: data.subtasks,
 		} as Task);
 	}
 
